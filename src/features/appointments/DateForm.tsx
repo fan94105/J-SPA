@@ -6,6 +6,7 @@ import FormWrapper from "../../ui/FormWrapper"
 import { Control, Controller } from "react-hook-form"
 import FormErrorMsg from "../../ui/FormErrorMsg"
 import moment from "moment"
+import { FormValues } from "../../types/global"
 
 const StyledCalendarContainer = styled.div`
   .react-calendar {
@@ -61,7 +62,7 @@ const blockout = [
 ].map((date) => date.toISOString().split("T")[0]) // 將日期轉換為 'yyyy-mm-dd' 格式
 
 type DateFormProps = {
-  control: Control<IFormValues>
+  control: Control<FormValues>
   error: string | undefined
 }
 

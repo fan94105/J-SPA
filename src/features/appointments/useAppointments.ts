@@ -4,12 +4,12 @@ import { getAppointments } from "../../services/apiAppointments"
 export function useAppointments() {
   const {
     data: appointments,
-    isPending,
+    isPending: isPendingAppointments,
     error,
   } = useQuery({
     queryKey: ["appointments"],
     queryFn: getAppointments,
   })
 
-  return { appointments, isPending, error }
+  return { appointments, isPendingAppointments, error }
 }

@@ -13,7 +13,6 @@ import { useLiff } from "react-liff"
 import ButtonIcon from "./ButtonIcon"
 import Footer from "./Footer"
 import { useOutsideClick } from "../hooks/useOutsideClick"
-import useProfile from "../hooks/useProfile"
 
 const StyledHeader = styled.header`
   background-color: var(--color-grey-200);
@@ -90,8 +89,6 @@ function Navbar() {
   const navigate = useNavigate()
 
   const { liff, isLoggedIn } = useLiff()
-
-  const { profile } = useProfile()
 
   const handleToggleNav = () => {
     setIsNavOpen((isNavOpen) => !isNavOpen)

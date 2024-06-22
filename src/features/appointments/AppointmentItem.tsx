@@ -94,7 +94,7 @@ function AppointmentItem({ appointment }: AppointmentItemProps) {
   }
 
   const handleEditAppointment = () => {
-    navigate(`/appointment?editId=${appointmentId}`)
+    navigate(`/appointments/${appointmentId}/edit`)
   }
 
   const handleDeleteAppointment = () => {

@@ -6,9 +6,10 @@ import Service from "./pages/Service"
 import Appointment from "./pages/Appointment"
 import GlobalStyles from "./styles/GlobalStyles"
 import NotFound from "./pages/NotFound"
-import ProtectedRoute from "./ui/ProtectedRoute"
+import { ProtectedRoute } from "./ui/ProtectedRoute"
 import Appointments from "./pages/Appointments"
 import AppointmentDetail from "./features/appointments/AppointmentDetail"
+import EditAppointment from "./pages/EditAppointment"
 
 function App() {
   return (
@@ -42,6 +43,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AppointmentDetail />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="appointments/:appointmentId/edit"
+              element={
+                <ProtectedRoute>
+                  <EditAppointment />
                 </ProtectedRoute>
               }
             />

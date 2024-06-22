@@ -11,7 +11,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import moment from "moment"
 import { useCreateAppointment } from "./useCreateAppointment"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { FormValues, Profile } from "../../types/global"
+import { Appointment, FormValues, Profile } from "../../types/global"
 import { useEditAppointment } from "./useEditAppointment"
 import { useAppointment } from "./useAppointment"
 import { useOption } from "../option/useOption"
@@ -19,6 +19,7 @@ import { useService } from "../service/useService"
 import { useOptions } from "../option/useOptions"
 import { useServices } from "../service/useServices"
 import { useLiff } from "react-liff"
+import { useProfile } from "../../ui/ProtectedRoute"
 
 const StyledAppointmentForm = styled.section`
   height: 100%;
@@ -57,43 +58,49 @@ const StyledBtnContainer = styled.div`
   justify-content: flex-end;
 `
 
-function AppointmentForm() {
-  const [profile, setProfile] = useState<Profile | null>(null)
+type AppointmentFormProps = {
+  appointmentToEdit?: Appointment | {}
+}
 
+function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
   const navigate = useNavigate()
 
-  const { liff } = useLiff()
+  const { profile } = useProfile()
 
-  const [searchParams] = useSearchParams()
+  const { createAppointment, isCreatingAppointment } = useCreateAppointment()
 
-  const { appointment } = useAppointment()
+  const { editAppointment, isEditingAppointment } = useEditAppointment()
 
   const { services, isPendingServices } = useServices()
 
   const { options, isPendingOptions } = useOptions()
 
-  // const { createAppointment, isCreatingAppointment } = useCreateAppointment()
+  const {
+    id: editId,
+    displayName,
+    phone,
+    observations,
+    date,
+    startTime,
+    serviceId,
+    optionId,
+  } = appointmentToEdit as Appointment
 
-  // const { editAppointment, isEditingAppointment } = useEditAppointment()
-
-  const appointmentId = searchParams.get("editId")
-
-  const isEditSession = !!appointmentId
+  const isEditSession = Boolean(editId)
 
   const isWorking =
-    // isCreatingAppointment ||
-    // isEditingAppointment ||
-    isPendingServices || isPendingOptions
+    isCreatingAppointment ||
+    isEditingAppointment ||
+    isPendingServices ||
+    isPendingOptions
 
-  if (appointment) {
-    const defaultOption = options?.find(
-      (option) => option.id === appointment.optionId
-    )
+  if (isEditSession) {
+    const defaultOption = options?.find((option) => option.id === optionId)
 
-    sessionStorage.setItem("displayName", appointment?.displayName!)
-    sessionStorage.setItem("phone", appointment?.phone!)
-    sessionStorage.setItem("observations", appointment?.observations || "")
-    sessionStorage.setItem("serviceId", String(appointment?.serviceId!))
+    sessionStorage.setItem("displayName", displayName!)
+    sessionStorage.setItem("phone", phone!)
+    sessionStorage.setItem("observations", observations || "")
+    sessionStorage.setItem("serviceId", String(serviceId!))
     sessionStorage.setItem(
       "option",
       JSON.stringify({
@@ -101,8 +108,8 @@ function AppointmentForm() {
         label: `${defaultOption?.name} (${defaultOption?.duration}) 分鐘 ${defaultOption?.price} 元`,
       })
     )
-    sessionStorage.setItem("date", String(appointment?.date))
-    sessionStorage.setItem("time", appointment?.startTime?.slice(0, 5)!)
+    sessionStorage.setItem("date", String(date))
+    sessionStorage.setItem("time", startTime?.slice(0, 5)!)
   }
 
   let defaultValues = {
@@ -111,7 +118,9 @@ function AppointmentForm() {
     observations: sessionStorage.getItem("observations") || null,
     serviceId: sessionStorage.getItem("serviceId") || "",
     option: JSON.parse(sessionStorage.getItem("option") as string) || undefined,
-    date: new Date(sessionStorage.getItem("date") as string) || undefined,
+    date: sessionStorage.getItem("date")
+      ? new Date(sessionStorage.getItem("date") as string)
+      : undefined,
     time: sessionStorage.getItem("time") || "",
   }
 
@@ -164,30 +173,30 @@ function AppointmentForm() {
 
     console.log(newAppointment)
 
-    // if (!isEditSession)
-    //   createAppointment(newAppointment, {
-    //     onSuccess: () => {
-    //       reset()
+    if (!isEditSession)
+      createAppointment(newAppointment, {
+        onSuccess: () => {
+          reset()
 
-    //       sessionStorage.clear()
+          sessionStorage.clear()
 
-    //       navigate(`/user/${profile?.userId}/appointments`)
-    //     },
-    //   })
+          navigate(`/user/${profile?.userId}/appointments`)
+        },
+      })
 
-    // if (isEditSession)
-    //   editAppointment(
-    //     { newAppointment, id: appointmentId },
-    //     {
-    //       onSuccess: () => {
-    //         reset()
+    if (isEditSession)
+      editAppointment(
+        { newAppointment, id: String(editId) },
+        {
+          onSuccess: () => {
+            reset()
 
-    //         sessionStorage.clear()
+            sessionStorage.clear()
 
-    //         navigate(`/user/${profile?.userId}/appointments`)
-    //       },
-    //     }
-    //   )
+            navigate(`/user/${profile?.userId}/appointments`)
+          },
+        }
+      )
   }
 
   const handlePrevStep = () => {
@@ -201,25 +210,9 @@ function AppointmentForm() {
     goTo(currentStep || 0)
   }, [])
 
-  // Edit form
   useEffect(() => {
     reset(defaultValues)
-  }, [appointment, profile])
-
-  useEffect(() => {
-    ;(async () => {
-      const profile = await liff.getProfile()
-
-      setProfile(profile)
-    })()
-  }, [liff])
-
-  useEffect(() => {
-    if (searchParams.get("editId")) {
-      reset(defaultValues)
-      sessionStorage.clear()
-    }
-  }, [location.pathname])
+  }, [editId, profile])
 
   return (
     <StyledAppointmentForm>
