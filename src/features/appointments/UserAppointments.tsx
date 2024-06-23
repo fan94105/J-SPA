@@ -8,6 +8,7 @@ import AppointmentItem from "./AppointmentItem"
 import Menus from "../../ui/Menus"
 import { Profile } from "../../types/global"
 import { useLiff } from "react-liff"
+import { useProfile } from "../../ui/ProtectedRoute"
 
 const StyledUserAppointment = styled.section`
   height: 100dvh;
@@ -45,28 +46,15 @@ const StyledList = styled.ul`
 `
 
 function UserAppointments() {
-  const [profile, setProfile] = useState<Profile | null>(null)
+  const { profile } = useProfile()
 
-  const { liff } = useLiff()
-
-  const { appointments, isPending } = useAppointments()
+  const { appointments, isPendingAppointments } = useAppointments()
 
   const userAppointments = appointments?.filter(
     (appointment) => appointment.lineId === profile?.userId
   )
 
-  useEffect(() => {
-    liff
-      .getProfile()
-      .then((profile) => {
-        setProfile(profile)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [liff])
-
-  if (isPending) return <Spinner />
+  if (isPendingAppointments) return <Spinner />
 
   return (
     <StyledUserAppointment>

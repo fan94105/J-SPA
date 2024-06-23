@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom"
 import Modal from "../../ui/Modal"
 import ConfirmDelete from "../../ui/ConfirmDelete"
 import { useDeleteAppointment } from "./useDeleteAppointment"
+import { useServices } from "../service/useServices"
+import { useOptions } from "../option/useOptions"
 
 const StyledAppointmentDetail = styled.section`
   height: 100dvh;
@@ -46,7 +48,17 @@ const StyledBtnRow = styled.div`
 function AppointmentDetail() {
   const navigate = useNavigate()
 
+  const { services, isPendingServices } = useServices()
+  const { options, isPendingOptions } = useOptions()
+
   const { appointment, isPendingAppointment } = useAppointment()
+
+  const selectedService = services?.find(
+    (service) => service.id === appointment?.serviceId
+  )
+  const selectedOption = options?.find(
+    (option) => option.id === appointment?.optionId
+  )
 
   const { deleteAppointment, isDeletingAppointment } = useDeleteAppointment()
 
@@ -56,7 +68,8 @@ function AppointmentDetail() {
     navigate("/appointments")
   }
 
-  if (isPendingAppointment) return <Spinner />
+  if (isPendingAppointment || isPendingServices || isPendingOptions)
+    return <Spinner />
 
   return (
     <Modal>
@@ -69,31 +82,31 @@ function AppointmentDetail() {
           <StyledRow>
             <div>日期</div>
             <div>
-              {moment(appointment?.date).format("YYYY-MM-DD dddd HH:mm")}
+              {`${moment(appointment?.date).format(
+                "YYYY-MM-DD dddd"
+              )} ${appointment?.startTime?.slice(0, 5)}`}
             </div>
           </StyledRow>
 
           <StyledRow>
             <div>項目</div>
-            {appointment?.options ? (
+            {selectedOption ? (
               <div>
-                {appointment?.services?.name} + {appointment?.options?.name}
+                {selectedService?.name} + {selectedOption?.name}
               </div>
             ) : (
-              <div>{appointment?.services?.name}</div>
+              <div>{selectedService?.name}</div>
             )}
           </StyledRow>
 
           <StyledRow>
             <div>時長</div>
-            {appointment?.options ? (
+            {selectedOption ? (
               <div>
-                {+appointment?.services?.duration! +
-                  +appointment?.options?.duration!}{" "}
-                分鐘
+                {+selectedService?.duration! + +selectedOption?.duration!} 分鐘
               </div>
             ) : (
-              <div>{appointment?.services?.duration} 分鐘</div>
+              <div>{selectedService?.duration} 分鐘</div>
             )}
           </StyledRow>
 
@@ -106,17 +119,16 @@ function AppointmentDetail() {
 
           <StyledRow>
             <div>價格</div>
-            {appointment?.options ? (
+            {selectedOption ? (
               <div>
-                {+appointment?.services?.regularPrice! -
-                  +appointment?.services?.discount! +
-                  +appointment?.options?.price!}{" "}
+                {+selectedService?.regularPrice! -
+                  +selectedService?.discount! +
+                  +selectedOption?.price!}{" "}
                 元
               </div>
             ) : (
               <div>
-                {+appointment?.services?.regularPrice! -
-                  +appointment?.services?.discount!}{" "}
+                {+selectedService?.regularPrice! - +selectedService?.discount!}{" "}
                 元
               </div>
             )}
@@ -126,7 +138,7 @@ function AppointmentDetail() {
         <StyledBtnRow>
           <Button
             $variation="secondary"
-            onClick={() => navigate(`/appointment?editId=${appointment?.id}`)}
+            onClick={() => navigate(`/appointments/edit/${appointment?.id}`)}
           >
             修改預約
           </Button>

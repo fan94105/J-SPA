@@ -19,6 +19,9 @@ import ConfirmDelete from "../../ui/ConfirmDelete"
 import { useNavigate } from "react-router-dom"
 import { useService } from "../service/useService"
 import { useOption } from "../option/useOption"
+import { useServices } from "../service/useServices"
+import { useOptions } from "../option/useOptions"
+import Spinner from "../../ui/Spinner"
 
 const StyledAppointmentItem = styled.div`
   padding: 1rem;
@@ -81,11 +84,19 @@ type AppointmentItemProps = {
 function AppointmentItem({ appointment }: AppointmentItemProps) {
   const navigate = useNavigate()
 
-  const { id: appointmentId, date, serviceId, optionId } = appointment
+  const { services, isPendingServices } = useServices()
+  const { options, isPendingOptions } = useOptions()
 
-  const { service, isPendingService } = useService(String(serviceId))
+  const {
+    id: appointmentId,
+    date,
+    startTime,
+    serviceId,
+    optionId,
+  } = appointment
 
-  const { option, isPendingOption } = useOption(String(optionId))
+  const selectedService = services?.find((service) => service.id === serviceId)
+  const selectedOption = options?.find((option) => option.id === optionId)
 
   const { deleteAppointment, isDeletingAppointment } = useDeleteAppointment()
 
@@ -94,12 +105,14 @@ function AppointmentItem({ appointment }: AppointmentItemProps) {
   }
 
   const handleEditAppointment = () => {
-    navigate(`/appointments/${appointmentId}/edit`)
+    navigate(`/appointments/edit/${appointmentId}`)
   }
 
   const handleDeleteAppointment = () => {
     deleteAppointment(String(appointmentId))
   }
+
+  if (isPendingServices || isPendingOptions) return <Spinner />
 
   return (
     <Modal>
@@ -133,17 +146,17 @@ function AppointmentItem({ appointment }: AppointmentItemProps) {
         </StyledBtn>
         <StyledRow>
           <HiOutlineCalendarDays />
-          <StyledDate>
-            {moment(date).format("YYYY/MM/DD dddd HH:mm")}
-          </StyledDate>
+          <StyledDate>{`${moment(date).format(
+            "YYYY/MM/DD dddd"
+          )} ${startTime?.slice(0, 5)}`}</StyledDate>
         </StyledRow>
         <StyledRow>
           <HiOutlineBookmark />
-          <StyledServiceName>{service?.name}</StyledServiceName>
+          <StyledServiceName>{selectedService?.name}</StyledServiceName>
         </StyledRow>
         <StyledRow>
           <HiOutlineSparkles />
-          <div>{optionId ? option?.name : "-"}</div>
+          <div>{optionId ? selectedOption?.name : "-"}</div>
         </StyledRow>
         <StyledRow>
           <HiOutlineCurrencyDollar />

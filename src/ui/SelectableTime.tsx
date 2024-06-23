@@ -1,6 +1,7 @@
 import React from "react"
 import { UseFormRegister } from "react-hook-form"
 import styled from "styled-components"
+import { FormValues } from "../types/global"
 
 const StyledSelectableTime = styled.div`
   display: grid;
@@ -34,17 +35,25 @@ const StyledInput = styled.input`
   }
 `
 
+const StyledMsg = styled.div`
+  text-align: center;
+`
+
 type SelectableTimeProps = {
-  name: keyof IFormValues
-  items: string[]
-  register: UseFormRegister<IFormValues>
+  name: keyof FormValues
+  items: string[] | []
+  register: UseFormRegister<FormValues>
 }
 
 function SelectableTime({ name, items, register }: SelectableTimeProps) {
   if (items.length === 0)
     return (
       <>
-        <p>無可預約時段，請選擇其他日期。</p>
+        <StyledMsg>無可預約時段，請選擇其他日期。</StyledMsg>
+        <input
+          type="hidden"
+          {...register(name, { required: "上一步選擇其他日期" })}
+        />
       </>
     )
 

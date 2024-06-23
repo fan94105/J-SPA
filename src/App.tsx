@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import AppLayout from "./ui/AppLayout"
 import Home from "./pages/Home"
-import Service from "./pages/Service"
 import Appointment from "./pages/Appointment"
 import GlobalStyles from "./styles/GlobalStyles"
 import NotFound from "./pages/NotFound"
@@ -48,7 +47,7 @@ function App() {
             />
 
             <Route
-              path="appointments/:appointmentId/edit"
+              path="appointments/edit/:appointmentId"
               element={
                 <ProtectedRoute>
                   <EditAppointment />

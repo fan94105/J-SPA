@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Heading from "../../ui/Heading"
 import styled from "styled-components"
 import Button from "../../ui/Button"
@@ -8,17 +8,13 @@ import UserForm from "./UserForm"
 import ServiceForm from "./ServiceForm"
 import TimeForm from "./TimeForm"
 import { SubmitHandler, useForm } from "react-hook-form"
-import moment from "moment"
+import moment, { duration } from "moment"
 import { useCreateAppointment } from "./useCreateAppointment"
-import { useNavigate, useSearchParams } from "react-router-dom"
-import { Appointment, FormValues, Profile } from "../../types/global"
+import { useNavigate } from "react-router-dom"
+import { Appointment, FormValues } from "../../types/global"
 import { useEditAppointment } from "./useEditAppointment"
-import { useAppointment } from "./useAppointment"
-import { useOption } from "../option/useOption"
-import { useService } from "../service/useService"
 import { useOptions } from "../option/useOptions"
 import { useServices } from "../service/useServices"
-import { useLiff } from "react-liff"
 import { useProfile } from "../../ui/ProtectedRoute"
 
 const StyledAppointmentForm = styled.section`
@@ -97,17 +93,19 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
   if (isEditSession) {
     const defaultOption = options?.find((option) => option.id === optionId)
 
+    if (defaultOption)
+      sessionStorage.setItem(
+        "option",
+        JSON.stringify({
+          value: String(defaultOption?.id),
+          label: `${defaultOption?.name} (${defaultOption?.duration}) 分鐘 ${defaultOption?.price} 元`,
+        })
+      )
+
     sessionStorage.setItem("displayName", displayName!)
     sessionStorage.setItem("phone", phone!)
     sessionStorage.setItem("observations", observations || "")
     sessionStorage.setItem("serviceId", String(serviceId!))
-    sessionStorage.setItem(
-      "option",
-      JSON.stringify({
-        value: String(defaultOption?.id),
-        label: `${defaultOption?.name} (${defaultOption?.duration}) 分鐘 ${defaultOption?.price} 元`,
-      })
-    )
     sessionStorage.setItem("date", String(date))
     sessionStorage.setItem("time", startTime?.slice(0, 5)!)
   }
@@ -124,7 +122,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
     time: sessionStorage.getItem("time") || "",
   }
 
-  const { handleSubmit, register, control, formState, reset } =
+  const { handleSubmit, register, control, formState, reset, trigger } =
     useForm<FormValues>()
   const { errors } = formState
 
@@ -157,18 +155,31 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
 
     const service = services?.find((service) => service.id === +data.serviceId)
 
+    const option = data.option
+      ? options?.find((option) => option.id === +data.option?.value!)
+      : null
+
     const newAppointment = {
       lineId: profile?.userId,
       displayName: data.displayName,
       phone: data.phone,
       observations: data.observations,
       serviceId: +data.serviceId,
-      optionId: data.option ? +data.option?.value! : null,
+      optionId: option ? option?.id : null,
       date: moment(data.date).format("YYYY-MM-DD"),
       startTime: `${data.time}:00`,
       endTime: moment(data.time, "HH:mm")
         .add(service?.duration, "minutes")
         .format("HH:mm:00"),
+      duration: option
+        ? service?.duration! + option?.duration!
+        : service?.duration,
+      servicePrice: service?.regularPrice! - service?.discount!,
+      optionPrice: option?.price || 0,
+      totalPrice:
+        service?.regularPrice! -
+        service?.discount! +
+        (data.option ? option?.price! : 0),
     }
 
     console.log(newAppointment)
@@ -180,7 +191,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
 
           sessionStorage.clear()
 
-          navigate(`/user/${profile?.userId}/appointments`)
+          navigate("/appointments")
         },
       })
 
@@ -193,7 +204,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
 
             sessionStorage.clear()
 
-            navigate(`/user/${profile?.userId}/appointments`)
+            navigate("/appointments")
           },
         }
       )
@@ -237,7 +248,13 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
               </Button>
             )}
 
-            <Button type="submit" disabled={isWorking}>
+            <Button
+              type="submit"
+              disabled={isWorking}
+              // disabled={
+              //   isWorking || (currentStepIndex === 2 && !getValues().time)
+              // }
+            >
               {!isLastStep ? "下一步" : isEditSession ? "確認修改" : "確認預約"}
             </Button>
           </StyledBtnContainer>

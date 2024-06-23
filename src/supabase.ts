@@ -14,6 +14,7 @@ export type Database = {
           created_at: string
           date: string | null
           displayName: string | null
+          duration: number | null
           endTime: string | null
           id: number
           lineId: string | null
@@ -30,6 +31,7 @@ export type Database = {
           created_at?: string
           date?: string | null
           displayName?: string | null
+          duration?: number | null
           endTime?: string | null
           id?: number
           lineId?: string | null
@@ -46,6 +48,7 @@ export type Database = {
           created_at?: string
           date?: string | null
           displayName?: string | null
+          duration?: number | null
           endTime?: string | null
           id?: number
           lineId?: string | null
@@ -64,7 +67,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
-          duration: string | null
+          duration: number | null
           id: number
           name: string | null
           price: number | null
@@ -72,7 +75,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
-          duration?: string | null
+          duration?: number | null
           id?: number
           name?: string | null
           price?: number | null
@@ -80,7 +83,7 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
-          duration?: string | null
+          duration?: number | null
           id?: number
           name?: string | null
           price?: number | null
