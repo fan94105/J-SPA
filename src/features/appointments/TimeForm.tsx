@@ -9,6 +9,7 @@ import moment from "moment"
 import Spinner from "../../ui/Spinner"
 import { useServices } from "../service/useServices"
 import { useOptions } from "../option/useOptions"
+import { useParams } from "react-router-dom"
 
 const times = [
   "09:00",
@@ -40,6 +41,10 @@ type TimeFormProps = {
 }
 
 function TimeForm({ register, error }: TimeFormProps) {
+  const { appointmentId } = useParams()
+
+  const isEditSession = Boolean(appointmentId)
+
   const { appointments, isPendingAppointments } = useAppointments()
 
   const { services, isPendingServices } = useServices()
@@ -72,9 +77,13 @@ function TimeForm({ register, error }: TimeFormProps) {
     return <Spinner />
 
   // 當日已有預約
-  const filteredAppointments = appointments?.filter(
-    (appointment) => appointment.date === selectedDate
-  )
+  const filteredAppointments = !isEditSession
+    ? appointments?.filter((appointment) => appointment.date === selectedDate)
+    : appointments?.filter(
+        (appointment) =>
+          appointment.date === selectedDate &&
+          appointment.id !== +appointmentId!
+      )
 
   const items = !filteredAppointments?.length
     ? times

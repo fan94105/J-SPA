@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react"
 import { useAppointments } from "./useAppointments"
 import Spinner from "../../ui/Spinner"
 import styled from "styled-components"
@@ -6,12 +5,10 @@ import Heading from "../../ui/Heading"
 import { Link } from "react-router-dom"
 import AppointmentItem from "./AppointmentItem"
 import Menus from "../../ui/Menus"
-import { Profile } from "../../types/global"
-import { useLiff } from "react-liff"
 import { useProfile } from "../../ui/ProtectedRoute"
 
 const StyledUserAppointment = styled.section`
-  height: 100dvh;
+  min-height: 100dvh;
   padding: 2rem;
   background-color: var(--color-grey-0);
 `
@@ -50,9 +47,23 @@ function UserAppointments() {
 
   const { appointments, isPendingAppointments } = useAppointments()
 
-  const userAppointments = appointments?.filter(
-    (appointment) => appointment.lineId === profile?.userId
-  )
+  const userAppointments = appointments
+    ?.filter(
+      (appointment) =>
+        appointment.lineId === profile?.userId &&
+        appointment.status === "confirmed"
+    )
+    .sort((a, b) => {
+      // 首先按照 date 进行升序排序
+      if (a.date! < b.date!) return -1
+      if (a.date! > b.date!) return 1
+
+      // 如果 date 相同，则按照 startTime 进行升序排序
+      if (a.startTime! < b.startTime!) return -1
+      if (a.startTime! > b.startTime!) return 1
+
+      return 0 // 如果 startTime 也相同，则顺序不变
+    })
 
   if (isPendingAppointments) return <Spinner />
 

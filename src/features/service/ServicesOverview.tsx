@@ -11,7 +11,9 @@ import { useServices } from "./useServices"
 import Spinner from "../../ui/Spinner"
 
 const StyledServicesOverview = styled.section`
-  padding: 4rem 2rem 6rem;
+  width: 62.5%;
+  margin: 0 auto;
+  padding: 6rem 0;
 `
 
 const StyledHeader = styled.header`
@@ -32,15 +34,15 @@ const settings = {
 }
 
 function ServicesOverview() {
-  const { services, isPending } = useServices()
+  const { services, isPendingServices } = useServices()
 
   return (
     <StyledServicesOverview>
       <StyledHeader>
-        <Heading as="h2">熱門服務</Heading>
+        <Heading as="h2">服務項目</Heading>
       </StyledHeader>
 
-      {isPending && <Spinner />}
+      {isPendingServices && <Spinner />}
 
       {services && (
         <Slider {...settings}>

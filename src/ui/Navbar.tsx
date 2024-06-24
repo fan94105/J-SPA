@@ -15,6 +15,7 @@ import Footer from "./Footer"
 import { useOutsideClick } from "../hooks/useOutsideClick"
 
 const StyledHeader = styled.header`
+  width: 100%;
   background-color: var(--color-grey-200);
   padding: 1rem 2rem;
 
@@ -22,7 +23,7 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   align-items: center;
 
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 999;
 `

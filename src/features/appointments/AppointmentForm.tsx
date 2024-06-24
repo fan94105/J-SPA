@@ -122,34 +122,24 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
     time: sessionStorage.getItem("time") || "",
   }
 
-  const { handleSubmit, register, control, formState, reset, trigger } =
+  const { handleSubmit, register, control, formState, reset } =
     useForm<FormValues>()
   const { errors } = formState
 
-  const {
-    currentStepIndex,
-    step,
-    steps,
-    isFirstStep,
-    isLastStep,
-    goTo,
-    next,
-    back,
-  } = useMultistepForm([
-    <ServiceForm
-      register={register}
-      control={control}
-      error={errors?.serviceId?.message}
-    />,
-    <DateForm control={control} error={errors?.date?.message} />,
-    <TimeForm register={register} error={errors?.time?.message} />,
-    <UserForm register={register} errors={errors} />,
-  ])
+  const { currentStepIndex, step, steps, isFirstStep, isLastStep, next, back } =
+    useMultistepForm([
+      <ServiceForm
+        register={register}
+        control={control}
+        error={errors?.serviceId?.message}
+      />,
+      <DateForm control={control} error={errors?.date?.message} />,
+      <TimeForm register={register} error={errors?.time?.message} />,
+      <UserForm register={register} errors={errors} />,
+    ])
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     if (!isLastStep) {
-      sessionStorage.setItem("currentStep", String(currentStepIndex + 1))
-
       return next()
     }
 
@@ -180,6 +170,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
         service?.regularPrice! -
         service?.discount! +
         (data.option ? option?.price! : 0),
+      status: "confirmed",
     }
 
     console.log(newAppointment)
@@ -210,17 +201,6 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
       )
   }
 
-  const handlePrevStep = () => {
-    sessionStorage.setItem("currentStep", String(currentStepIndex - 1))
-
-    return back()
-  }
-
-  useEffect(() => {
-    const currentStep = +sessionStorage.getItem("currentStep")!
-    goTo(currentStep || 0)
-  }, [])
-
   useEffect(() => {
     reset(defaultValues)
   }, [editId, profile])
@@ -238,12 +218,18 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
           </StyledCounter>
           {step}
           <StyledBtnContainer>
-            {!isFirstStep && (
+            {isEditSession && (
               <Button
                 type="button"
                 $variation="secondary"
-                onClick={handlePrevStep}
+                onClick={() => navigate("/appointments")}
               >
+                取消
+              </Button>
+            )}
+
+            {!isFirstStep && (
+              <Button type="button" $variation="secondary" onClick={back}>
                 上一步
               </Button>
             )}

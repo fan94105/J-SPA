@@ -25,6 +25,7 @@ export type Database = {
           serviceId: number | null
           servicePrice: number | null
           startTime: string | null
+          status: string | null
           totalPrice: number | null
         }
         Insert: {
@@ -42,6 +43,7 @@ export type Database = {
           serviceId?: number | null
           servicePrice?: number | null
           startTime?: string | null
+          status?: string | null
           totalPrice?: number | null
         }
         Update: {
@@ -59,9 +61,25 @@ export type Database = {
           serviceId?: number | null
           servicePrice?: number | null
           startTime?: string | null
+          status?: string | null
           totalPrice?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointments_optionId_fkey"
+            columns: ["optionId"]
+            isOneToOne: false
+            referencedRelation: "options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_serviceId_fkey"
+            columns: ["serviceId"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       options: {
         Row: {

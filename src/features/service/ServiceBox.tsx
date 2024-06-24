@@ -90,11 +90,7 @@ function ServiceBox({ service }: ServiceBoxProps) {
 
         <StyledRow>
           <HiOutlineCurrencyDollar />
-          {service.discount
-            ? `原價 ${service.regularPrice} 元 / 優惠價 ${
-                service.regularPrice! - service.discount!
-              } 元`
-            : `${service.regularPrice!} 元`}
+          {service.regularPrice} 元
         </StyledRow>
 
         <StyledBtnRow>
