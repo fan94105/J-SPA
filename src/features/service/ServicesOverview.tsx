@@ -1,5 +1,5 @@
 import React from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -9,11 +9,16 @@ import ServiceBox from "./ServiceBox"
 import Heading from "../../ui/Heading"
 import { useServices } from "./useServices"
 import Spinner from "../../ui/Spinner"
+import { desktop } from "../../styles/device"
 
 const StyledServicesOverview = styled.section`
-  width: 62.5%;
+  width: 80%;
   margin: 0 auto;
   padding: 6rem 0;
+
+  ${desktop(css`
+    width: 62.5%;
+  `)}
 `
 
 const StyledHeader = styled.header`
@@ -31,6 +36,23 @@ const settings = {
   slidesToScroll: 1,
   pauseOnFocus: true,
   arrows: false,
+  centerMode: true,
+  centerPadding: "50px",
+
+  responsive: [
+    {
+      breakpoint: 1500,
+      settings: {
+        centerMode: true,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        centerMode: false,
+      },
+    },
+  ],
 }
 
 function ServicesOverview() {

@@ -1,12 +1,23 @@
 import React from "react"
 import { UseFormRegister } from "react-hook-form"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { FormValues } from "../types/global"
+import { laptop } from "../styles/device"
 
 const StyledSelectableTime = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(50px, 100%), 1fr));
   gap: 2rem;
+
+  border: 1px solid var(--color-grey-300);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 2rem;
+
+  ${laptop(css`
+    width: 50%;
+    margin: 0 auto;
+  `)}
 `
 
 const StyledTimeCard = styled.div`
@@ -21,6 +32,10 @@ const StyledLabel = styled.label`
   box-shadow: var(--shadow-sm);
   cursor: pointer;
 
+  &:hover {
+    background-color: var(--color-brand-50);
+  }
+
   transition: all 0.3s;
 `
 
@@ -31,7 +46,8 @@ const StyledInput = styled.input`
     border: 1px solid var(--color-brand-600);
     box-shadow: var(--shadow-md);
 
-    background-color: var(--color-brand-50);
+    color: var(--color-grey-0);
+    background-color: var(--color-brand-500);
   }
 `
 

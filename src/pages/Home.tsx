@@ -1,6 +1,7 @@
 import Banner from "../ui/Banner"
 import ServicesOverview from "../features/service/ServicesOverview"
 import Location from "../ui/Location"
+import Footer from "../ui/Footer"
 
 function Home() {
   return (
@@ -10,6 +11,8 @@ function Home() {
       <ServicesOverview />
 
       <Location />
+
+      <Footer />
     </>
   )
 }

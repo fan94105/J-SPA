@@ -18,8 +18,10 @@ import { useServices } from "../service/useServices"
 import { useProfile } from "../../ui/ProtectedRoute"
 
 const StyledAppointmentForm = styled.section`
+  width: 80%;
+  margin: 0 auto;
   height: 100%;
-  padding: 2rem;
+  padding: 8rem 0 2rem;
 `
 
 const StyledHeader = styled.header`
@@ -224,7 +226,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
                 $variation="secondary"
                 onClick={() => navigate("/appointments")}
               >
-                取消
+                取消修改
               </Button>
             )}
 

@@ -9,7 +9,7 @@ import { useProfile } from "../../ui/ProtectedRoute"
 
 const StyledUserAppointment = styled.section`
   min-height: 100dvh;
-  padding: 2rem;
+  padding: 8rem 2rem 2rem;
   background-color: var(--color-grey-0);
 `
 

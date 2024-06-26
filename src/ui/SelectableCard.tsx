@@ -17,7 +17,8 @@ const StyledLabel = styled.label`
   min-height: 15rem;
 
   display: grid;
-  grid-template-columns: 10rem 1fr;
+  /* grid-template-columns: 10rem 1fr; */
+  grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
   align-items: center;
   gap: 1rem;
   padding: 1rem;

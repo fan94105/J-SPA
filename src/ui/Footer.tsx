@@ -9,10 +9,6 @@ const StyledFooter = styled.footer`
   text-align: center;
 
   color: var(--color-grey-400);
-
-  position: fixed;
-  left: 0;
-  bottom: 0;
 `
 
 function Footer() {

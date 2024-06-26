@@ -7,24 +7,6 @@ type Profile = {
   statusMessage?: string
 }
 
-type Service = {
-  id: number
-  name: string
-  description: string
-  image: string
-  regularPrice: number
-  discount: number
-  duration: number
-}
-
-// type Appointment = {
-//   id: number
-//   serviceId: number
-//   userId: string
-//   date: string
-//   time: string
-// }
-
 // react-hook-form form values
 type FormValues = {
   displayName: string
@@ -38,4 +20,8 @@ type FormValues = {
 
 type Appointment = Database["public"]["Tables"]["appointments"]["Row"]
 
-export { Profile, Service, FormValues, Appointment }
+type Service = Database["public"]["Tables"]["services"]["Row"]
+
+type Option = Database["public"]["Tables"]["options"]["Row"]
+
+export { Profile, FormValues, Appointment, Service, Option }

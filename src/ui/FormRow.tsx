@@ -1,9 +1,15 @@
 import React from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import FormErrorMsg from "./FormErrorMsg"
+import { desktop } from "../styles/device"
 
 const StyledFormRow = styled.div`
   position: relative;
+
+  ${desktop(css`
+    width: 50%;
+    margin: 0 auto;
+  `)}
 
   label {
     padding-block: 0;

@@ -35,7 +35,6 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isLoggedIn, liff } = useLiff()
 
   const { appointment } = useAppointment()
-  console.log(appointment)
 
   const redirectPath = sessionStorage.getItem("redirectPath") || ""
 

@@ -13,11 +13,12 @@ import { useLiff } from "react-liff"
 import ButtonIcon from "./ButtonIcon"
 import Footer from "./Footer"
 import { useOutsideClick } from "../hooks/useOutsideClick"
+import { tablet } from "../styles/device"
 
 const StyledHeader = styled.header`
   width: 100%;
   background-color: var(--color-grey-200);
-  padding: 1rem 2rem;
+  padding: 1.4rem 4rem;
 
   display: flex;
   justify-content: space-between;
@@ -47,6 +48,14 @@ const StyledNav = styled.nav<{
 
   position: fixed;
   inset: 0 0 0 20%;
+
+  ${tablet(css`
+    opacity: 1;
+    transform: translateX(0);
+    height: 100%;
+    position: relative;
+    inset: unset;
+  `)}
 `
 
 const StyledList = styled.ul`
@@ -61,25 +70,65 @@ const StyledList = styled.ul`
   flex-direction: column;
   gap: 1rem;
 
-  & li {
-    padding: 1rem;
-  }
+  ${tablet(css`
+    flex-direction: row;
+    padding: 0;
+    background-color: transparent;
+  `)}
 
   & a {
+    background-color: transparent;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+
     display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: var(--color-grey-100);
+
+      svg {
+        color: var(--color-brand-600);
+      }
+    }
   }
 
   & svg {
     width: 2.2rem;
     height: 2.2rem;
-    color: var(--color-brand-600);
+    color: var(--color-grey-500);
 
     margin-right: 1rem;
   }
 `
 
+const StyledBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: var(--color-grey-100);
+
+    svg {
+      color: var(--color-brand-600);
+    }
+  }
+`
+
 const StyledToggleBtn = styled.div`
   position: relative;
+
+  ${tablet(css`
+    display: none;
+  `)}
 `
 
 function Navbar() {
@@ -153,14 +202,13 @@ function Navbar() {
 
           {isLoggedIn && (
             <li>
-              <ButtonIcon onClick={handleLogout}>
+              <StyledBtn onClick={handleLogout}>
                 <HiOutlineArrowRightOnRectangle />
                 <span>登出</span>
-              </ButtonIcon>
+              </StyledBtn>
             </li>
           )}
         </StyledList>
-        <Footer />
       </StyledNav>
 
       <StyledToggleBtn>

@@ -5,6 +5,14 @@ import { Control, Controller, UseFormRegister } from "react-hook-form"
 import FormErrorMsg from "../../ui/FormErrorMsg"
 import { useOptions } from "../option/useOptions"
 import { FormValues } from "../../types/global"
+import styled, { css } from "styled-components"
+import { desktop } from "../../styles/device"
+
+const StyledSelectContainer = styled.div`
+  ${desktop(css`
+    max-width: 50%;
+  `)}
+`
 
 type ServiceFormProps = {
   register: UseFormRegister<FormValues>
@@ -26,24 +34,26 @@ function ServiceForm({ register, control, error }: ServiceFormProps) {
 
       {error && <FormErrorMsg>{error}</FormErrorMsg>}
 
-      <Controller
-        control={control}
-        name="option"
-        render={({ field: { onChange, ...field } }) => (
-          <Select
-            {...field}
-            onChange={(e) => {
-              sessionStorage.setItem("option", JSON.stringify(e))
-              onChange(e)
-            }}
-            options={selectOptions}
-            isClearable
-            isSearchable={false}
-            placeholder="需要加選服務嗎?"
-            isLoading={isPendingOptions}
-          />
-        )}
-      />
+      <StyledSelectContainer>
+        <Controller
+          control={control}
+          name="option"
+          render={({ field: { onChange, ...field } }) => (
+            <Select
+              {...field}
+              onChange={(e) => {
+                sessionStorage.setItem("option", JSON.stringify(e))
+                onChange(e)
+              }}
+              options={selectOptions}
+              isClearable
+              isSearchable={false}
+              placeholder="需要加選服務嗎?"
+              isLoading={isPendingOptions}
+            />
+          )}
+        />
+      </StyledSelectContainer>
     </FormWrapper>
   )
 }

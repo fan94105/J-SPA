@@ -11,39 +11,43 @@ import ConfirmDelete from "../../ui/ConfirmDelete"
 import { useDeleteAppointment } from "./useDeleteAppointment"
 import { useServices } from "../service/useServices"
 import { useOptions } from "../option/useOptions"
+import ButtonText from "../../ui/ButtonText"
+import AppointmentDataBox from "./AppointmentDataBox"
+import Tag from "../../ui/Tag"
+import { Appointment } from "../../types/global"
 
 const StyledAppointmentDetail = styled.section`
-  height: 100dvh;
-  padding: 2rem;
-  background-color: var(--color-grey-0);
+  width: 80%;
+  margin: 0 auto;
+  padding: 8rem 0 6rem;
 `
 
 const StyledHeader = styled.header`
-  text-align: center;
   margin-bottom: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
 
-const StyledBox = styled.div`
-  background-color: var(--color-grey-0);
-  border: 1px solid var(--color-grey-300);
-  border-radius: var(--border-radius-md);
-  padding: 2rem;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 2rem;
-`
-
-const StyledRow = styled.div`
-  display: grid;
-  grid-template-columns: max-content 1fr;
+const StyledHeadingGroup = styled.div`
+  display: flex;
+  align-items: center;
   gap: 0.8rem;
-  margin-bottom: 1.6rem;
 `
 
 const StyledBtnRow = styled.div`
+  margin-top: 2rem;
+
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 `
+
+const statusToTagName: Record<string, string> = {
+  confirmed: "green",
+  completed: "silver",
+}
 
 function AppointmentDetail() {
   const navigate = useNavigate()
@@ -52,13 +56,14 @@ function AppointmentDetail() {
   const { options, isPendingOptions } = useOptions()
 
   const { appointment, isPendingAppointment } = useAppointment()
+  const tagType = appointment?.status
+    ? statusToTagName[appointment?.status]
+    : "green"
 
-  const selectedService = services?.find(
+  const service = services?.find(
     (service) => service.id === appointment?.serviceId
   )
-  const selectedOption = options?.find(
-    (option) => option.id === appointment?.optionId
-  )
+  const option = options?.find((option) => option.id === appointment?.optionId)
 
   const { deleteAppointment, isDeletingAppointment } = useDeleteAppointment()
 
@@ -75,65 +80,19 @@ function AppointmentDetail() {
     <Modal>
       <StyledAppointmentDetail>
         <StyledHeader>
-          <Heading as="h1">預約詳情</Heading>
+          <StyledHeadingGroup>
+            <Heading as="h1">預約 #{appointment?.id}</Heading>
+            <Tag $type={tagType}>{appointment?.status}</Tag>
+          </StyledHeadingGroup>
+
+          <ButtonText onClick={() => navigate(-1)}>&larr; 返回</ButtonText>
         </StyledHeader>
 
-        <StyledBox>
-          <StyledRow>
-            <div>日期</div>
-            <div>
-              {`${moment(appointment?.date).format(
-                "YYYY-MM-DD dddd"
-              )} ${appointment?.startTime?.slice(0, 5)}`}
-            </div>
-          </StyledRow>
-
-          <StyledRow>
-            <div>項目</div>
-            {selectedOption ? (
-              <div>
-                {selectedService?.name} + {selectedOption?.name}
-              </div>
-            ) : (
-              <div>{selectedService?.name}</div>
-            )}
-          </StyledRow>
-
-          <StyledRow>
-            <div>時長</div>
-            {selectedOption ? (
-              <div>
-                {+selectedService?.duration! + +selectedOption?.duration!} 分鐘
-              </div>
-            ) : (
-              <div>{selectedService?.duration} 分鐘</div>
-            )}
-          </StyledRow>
-
-          {appointment?.observations && (
-            <StyledRow>
-              <div>備註</div>
-              <div>{appointment?.observations}</div>
-            </StyledRow>
-          )}
-
-          <StyledRow>
-            <div>價格</div>
-            {selectedOption ? (
-              <div>
-                {+selectedService?.regularPrice! -
-                  +selectedService?.discount! +
-                  +selectedOption?.price!}{" "}
-                元
-              </div>
-            ) : (
-              <div>
-                {+selectedService?.regularPrice! - +selectedService?.discount!}{" "}
-                元
-              </div>
-            )}
-          </StyledRow>
-        </StyledBox>
+        <AppointmentDataBox
+          appointment={appointment!}
+          service={service!}
+          option={option}
+        />
 
         <StyledBtnRow>
           <Button

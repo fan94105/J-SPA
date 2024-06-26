@@ -1,26 +1,32 @@
 import React from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import Heading from "../../ui/Heading"
 import Button from "../../ui/Button"
 import { Link } from "react-router-dom"
 import { Tables } from "../../supabase"
 import { HiOutlineClock, HiOutlineCurrencyDollar } from "react-icons/hi2"
+import { desktop, laptop } from "../../styles/device"
 
 const StyledServiceBox = styled.div`
-  margin: 0 1rem;
+  margin: 0 2rem;
+  background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-300);
   border-radius: 10px;
   overflow: hidden;
+
+  ${desktop(css`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  `)}
 `
 
 const StyledImage = styled.div`
-  width: 100%;
   overflow: hidden;
 
   img {
     display: block;
-    width: 100%;
     object-fit: cover;
     object-position: center;
 
@@ -34,14 +40,28 @@ const StyledImage = styled.div`
 
 const StyledInfo = styled.div`
   padding: 1rem;
-  background-color: var(--color-grey-50);
+
+  ${laptop(css`
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+  `)}
 
   h3 {
     margin-bottom: 0.2rem;
+
+    ${laptop(css`
+      margin-bottom: 1rem;
+    `)}
   }
 
   p {
     margin-bottom: 1rem;
+
+    ${laptop(css`
+      margin-bottom: 2rem;
+    `)}
   }
 `
 
@@ -61,6 +81,10 @@ const StyledBtnRow = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+
+  ${laptop(css`
+    margin-top: auto;
+  `)}
 
   button {
     flex: 1;

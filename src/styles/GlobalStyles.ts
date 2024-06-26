@@ -203,7 +203,6 @@ img {
     font-size: 4rem;
     color: var(--color-grey-700);
   }
-
 `
 
 export default GlobalStyles

@@ -147,7 +147,7 @@ function AppointmentItem({ appointment }: AppointmentItemProps) {
         <StyledRow>
           <HiOutlineCalendarDays />
           <StyledDate>{`${moment(date).format(
-            "YYYY/MM/DD dddd"
+            "YYYY/MM/DD ddd"
           )} ${startTime?.slice(0, 5)}`}</StyledDate>
         </StyledRow>
         <StyledRow>
