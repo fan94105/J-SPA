@@ -2,18 +2,20 @@ import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled, { css } from "styled-components"
 import {
+  HiOutlineArrowRightEndOnRectangle,
   HiOutlineArrowRightOnRectangle,
   HiOutlineBars3BottomRight,
   HiOutlineCalendarDays,
-  HiOutlineCog8Tooth,
+  HiOutlineCog6Tooth,
   HiOutlineUser,
   HiOutlineXMark,
 } from "react-icons/hi2"
 import { useLiff } from "react-liff"
 import ButtonIcon from "./ButtonIcon"
-import Footer from "./Footer"
 import { useOutsideClick } from "../hooks/useOutsideClick"
 import { tablet } from "../styles/device"
+import { useProfile } from "./ProtectedRoute"
+import { Profile } from "../types/global"
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -44,6 +46,8 @@ const StyledNav = styled.nav<{
         `}
 
   height: 100dvh;
+  background-color: var(--color-grey-0);
+
   transition: all 350ms ease-out;
 
   position: fixed;
@@ -55,20 +59,62 @@ const StyledNav = styled.nav<{
     height: 100%;
     position: relative;
     inset: unset;
+
+    display: flex;
+    justify-content: space-between
+    align-items: center;
+
+    background-color: var(--color-grey-200);
   `)}
+`
+
+const StyledUserInfo = styled.div`
+  padding: 1.6rem 4rem 1.1rem;
+  border-bottom: 1px solid var(--color-grey-300);
+
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  ${tablet(css`
+    border-bottom: none;
+    border-left: 1px solid var(--color-grey-300);
+    padding: 0 0 0 1.2rem;
+    order: 2;
+  `)}
+`
+
+const StyledUserImg = styled.div`
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--color-grey-300);
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+`
+
+const StyledUserName = styled.div`
+  color: var(--color-grey-700);
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 2.4rem;
 `
 
 const StyledList = styled.ul`
   color: var(--color-grey-700);
-  background-color: #fff;
-  padding: 12rem 5rem;
-  height: 100%;
 
-  position: relative;
+  padding: 2.4rem 4rem;
 
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  position: relative;
 
   ${tablet(css`
     flex-direction: row;
@@ -133,6 +179,7 @@ const StyledToggleBtn = styled.div`
 
 function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false)
+  const [profile, setProfile] = useState<Profile | null>(null)
 
   const ref = useOutsideClick(() => setIsNavOpen(false))
 
@@ -144,12 +191,18 @@ function Navbar() {
     setIsNavOpen((isNavOpen) => !isNavOpen)
   }
 
+  const handleLogin = () => {
+    liff.login()
+  }
+
   const handleLogout = () => {
     liff.logout()
 
     sessionStorage.clear()
 
     setIsNavOpen(false)
+
+    setProfile(null)
 
     navigate("/")
   }
@@ -164,6 +217,19 @@ function Navbar() {
     }
   }, [isNavOpen])
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      liff
+        .getProfile()
+        .then((profile) => {
+          setProfile(profile)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [liff, isLoggedIn])
+
   return (
     <StyledHeader ref={ref}>
       <Link to="/" onClick={() => setIsNavOpen(false)}>
@@ -171,34 +237,69 @@ function Navbar() {
       </Link>
 
       <StyledNav $isNavOpen={isNavOpen}>
-        <StyledList>
-          <li>
-            <Link
-              to="appointment"
-              onClick={() => {
-                sessionStorage.clear()
-                sessionStorage.setItem("redirectPath", "/appointment")
-                setIsNavOpen(false)
-              }}
-            >
-              <HiOutlineCalendarDays />
-              <span>線上預約</span>
-            </Link>
-          </li>
+        <StyledUserInfo>
+          <StyledUserImg>
+            {profile ? (
+              <img
+                src={profile.pictureUrl}
+                alt={`${profile.displayName} 的頭像`}
+              />
+            ) : null}
+          </StyledUserImg>
+          <StyledUserName>
+            {profile ? profile.displayName : "未登入"}
+          </StyledUserName>
+        </StyledUserInfo>
 
-          <li>
-            <Link
-              to="appointments"
-              onClick={() => {
-                sessionStorage.clear()
-                sessionStorage.setItem("redirectPath", "/appointments")
-                setIsNavOpen(false)
-              }}
-            >
-              <HiOutlineUser />
-              <span>我的預約</span>
-            </Link>
-          </li>
+        <StyledList>
+          {isLoggedIn && (
+            <>
+              <li>
+                <Link
+                  to="appointment"
+                  onClick={() => {
+                    sessionStorage.clear()
+                    sessionStorage.setItem("redirectPath", "/appointment")
+                    setIsNavOpen(false)
+                  }}
+                >
+                  <HiOutlineCalendarDays />
+                  <span>線上預約</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="appointments"
+                  onClick={() => {
+                    sessionStorage.clear()
+                    sessionStorage.setItem("redirectPath", "/appointments")
+                    setIsNavOpen(false)
+                  }}
+                >
+                  <HiOutlineUser />
+                  <span>我的預約</span>
+                </Link>
+              </li>
+            </>
+          )}
+
+          {profile?.userId === "Ua3123cb2be4dfaf29a66e1ac453575b2" && (
+            <li>
+              <Link to="login" onClick={() => setIsNavOpen(false)}>
+                <HiOutlineCog6Tooth />
+                <span>管理員登入</span>
+              </Link>
+            </li>
+          )}
+
+          {!isLoggedIn && (
+            <li>
+              <StyledBtn onClick={handleLogin}>
+                <HiOutlineArrowRightEndOnRectangle />
+                <span>登入</span>
+              </StyledBtn>
+            </li>
+          )}
 
           {isLoggedIn && (
             <li>

@@ -9,6 +9,8 @@ import { ProtectedRoute } from "./ui/ProtectedRoute"
 import Appointments from "./pages/Appointments"
 import AppointmentDetail from "./features/appointments/AppointmentDetail"
 import EditAppointment from "./pages/EditAppointment"
+import Login from "./pages/Login"
+import Dashboard from "./pages/Dashboard"
 
 function App() {
   return (
@@ -51,6 +53,24 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EditAppointment />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="login"
+              element={
+                <ProtectedRoute>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
                 </ProtectedRoute>
               }
             />

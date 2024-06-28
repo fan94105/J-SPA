@@ -1,7 +1,7 @@
 import { RuleSet, css } from "styled-components"
 
 const size = {
-  tablet: "500px",
+  tablet: "600px",
   laptop: "768px",
   desktop: "1024px",
 }

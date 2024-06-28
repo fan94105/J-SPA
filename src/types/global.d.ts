@@ -18,10 +18,15 @@ type FormValues = {
   time: string
 }
 
+type AuthFormValues = {
+  email: string
+  password: string
+}
+
 type Appointment = Database["public"]["Tables"]["appointments"]["Row"]
 
 type Service = Database["public"]["Tables"]["services"]["Row"]
 
 type Option = Database["public"]["Tables"]["options"]["Row"]
 
-export { Profile, FormValues, Appointment, Service, Option }
+export { Profile, FormValues, AuthFormValues, Appointment, Service, Option }
