@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { AuthFormValues } from "../../types/global"
 import { login } from "../../services/apiAuth"
 import { useLogin } from "./useLogin"
+import { useNavigate } from "react-router-dom"
 
 const StyledForm = styled.form`
   width: 80%;
@@ -38,7 +39,7 @@ function LoginForm() {
   const { errors } = formState
 
   const onSubmit: SubmitHandler<AuthFormValues> = (data) => {
-    console.log(data)
+    if (!data.email || !data.password) return
 
     login(data)
   }

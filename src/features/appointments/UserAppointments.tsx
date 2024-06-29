@@ -5,7 +5,7 @@ import Heading from "../../ui/Heading"
 import { Link } from "react-router-dom"
 import AppointmentItem from "./AppointmentItem"
 import Menus from "../../ui/Menus"
-import { useProfile } from "../../ui/ProtectedRoute"
+import { useLiff } from "../../context/LiffContext"
 
 const StyledUserAppointment = styled.section`
   min-height: 100dvh;
@@ -43,7 +43,7 @@ const StyledList = styled.ul`
 `
 
 function UserAppointments() {
-  const { profile } = useProfile()
+  const { profile } = useLiff()
 
   const { appointments, isPendingAppointments } = useAppointments()
 

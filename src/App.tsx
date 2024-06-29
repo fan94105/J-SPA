@@ -5,12 +5,12 @@ import Home from "./pages/Home"
 import Appointment from "./pages/Appointment"
 import GlobalStyles from "./styles/GlobalStyles"
 import NotFound from "./pages/NotFound"
-import { ProtectedRoute } from "./ui/ProtectedRoute"
 import Appointments from "./pages/Appointments"
 import AppointmentDetail from "./features/appointments/AppointmentDetail"
 import EditAppointment from "./pages/EditAppointment"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
+import ProtectedRoute from "./ui/ProtectedRoute"
 
 function App() {
   return (
@@ -21,50 +21,21 @@ function App() {
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />} />
 
-            <Route
-              path="appointment"
-              element={
-                <ProtectedRoute>
-                  <Appointment />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="appointment" element={<Appointment />} />
 
-            <Route
-              path="appointments"
-              element={
-                <ProtectedRoute>
-                  <Appointments />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="appointments" element={<Appointments />} />
 
             <Route
               path="appointments/:appointmentId"
-              element={
-                <ProtectedRoute>
-                  <AppointmentDetail />
-                </ProtectedRoute>
-              }
+              element={<AppointmentDetail />}
             />
 
             <Route
               path="appointments/edit/:appointmentId"
-              element={
-                <ProtectedRoute>
-                  <EditAppointment />
-                </ProtectedRoute>
-              }
+              element={<EditAppointment />}
             />
 
-            <Route
-              path="login"
-              element={
-                <ProtectedRoute>
-                  <Login />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="login" element={<Login />} />
 
             <Route
               path="dashboard"

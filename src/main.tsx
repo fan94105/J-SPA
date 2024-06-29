@@ -2,13 +2,11 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App"
 import { ErrorBoundary } from "react-error-boundary"
-import { LiffProvider } from "react-liff"
 
 import ErrorFallback from "./ui/ErrorFallback"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-
-const liffId = import.meta.env.VITE_LIFF_ID
+import { LiffContextProvider } from "./context/LiffContext"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,12 +22,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       FallbackComponent={ErrorFallback}
       onReset={() => window.location.replace("/")}
     >
-      <LiffProvider liffId={liffId}>
+      <LiffContextProvider>
         <QueryClientProvider client={queryClient}>
           <App />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
-      </LiffProvider>
+      </LiffContextProvider>
     </ErrorBoundary>
   </React.StrictMode>
 )

@@ -8,14 +8,14 @@ import UserForm from "./UserForm"
 import ServiceForm from "./ServiceForm"
 import TimeForm from "./TimeForm"
 import { SubmitHandler, useForm } from "react-hook-form"
-import moment, { duration } from "moment"
+import moment from "moment"
 import { useCreateAppointment } from "./useCreateAppointment"
 import { useNavigate } from "react-router-dom"
 import { Appointment, FormValues } from "../../types/global"
 import { useEditAppointment } from "./useEditAppointment"
 import { useOptions } from "../option/useOptions"
 import { useServices } from "../service/useServices"
-import { useProfile } from "../../ui/ProtectedRoute"
+import { useLiff } from "../../context/LiffContext"
 
 const StyledAppointmentForm = styled.section`
   width: 80%;
@@ -63,7 +63,7 @@ type AppointmentFormProps = {
 function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
   const navigate = useNavigate()
 
-  const { profile } = useProfile()
+  const { profile } = useLiff()
 
   const { createAppointment, isCreatingAppointment } = useCreateAppointment()
 

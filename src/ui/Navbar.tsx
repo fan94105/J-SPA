@@ -10,12 +10,10 @@ import {
   HiOutlineUser,
   HiOutlineXMark,
 } from "react-icons/hi2"
-import { useLiff } from "react-liff"
 import ButtonIcon from "./ButtonIcon"
 import { useOutsideClick } from "../hooks/useOutsideClick"
 import { tablet } from "../styles/device"
-import { useProfile } from "./ProtectedRoute"
-import { Profile } from "../types/global"
+import { useLiff } from "../context/LiffContext"
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -179,30 +177,27 @@ const StyledToggleBtn = styled.div`
 
 function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false)
-  const [profile, setProfile] = useState<Profile | null>(null)
+
+  const { isLoggedIn, profile, login, logout } = useLiff()
 
   const ref = useOutsideClick(() => setIsNavOpen(false))
 
   const navigate = useNavigate()
-
-  const { liff, isLoggedIn } = useLiff()
 
   const handleToggleNav = () => {
     setIsNavOpen((isNavOpen) => !isNavOpen)
   }
 
   const handleLogin = () => {
-    liff.login()
+    login?.()
   }
 
   const handleLogout = () => {
-    liff.logout()
+    logout?.()
 
     sessionStorage.clear()
 
     setIsNavOpen(false)
-
-    setProfile(null)
 
     navigate("/")
   }
@@ -217,19 +212,6 @@ function Navbar() {
     }
   }, [isNavOpen])
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      liff
-        .getProfile()
-        .then((profile) => {
-          setProfile(profile)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [liff, isLoggedIn])
-
   return (
     <StyledHeader ref={ref}>
       <Link to="/" onClick={() => setIsNavOpen(false)}>
@@ -239,7 +221,7 @@ function Navbar() {
       <StyledNav $isNavOpen={isNavOpen}>
         <StyledUserInfo>
           <StyledUserImg>
-            {profile ? (
+            {isLoggedIn && profile ? (
               <img
                 src={profile.pictureUrl}
                 alt={`${profile.displayName} 的頭像`}
@@ -247,7 +229,7 @@ function Navbar() {
             ) : null}
           </StyledUserImg>
           <StyledUserName>
-            {profile ? profile.displayName : "未登入"}
+            {isLoggedIn && profile ? profile.displayName : "未登入"}
           </StyledUserName>
         </StyledUserInfo>
 
@@ -283,14 +265,15 @@ function Navbar() {
             </>
           )}
 
-          {profile?.userId === "Ua3123cb2be4dfaf29a66e1ac453575b2" && (
-            <li>
-              <Link to="login" onClick={() => setIsNavOpen(false)}>
-                <HiOutlineCog6Tooth />
-                <span>管理員登入</span>
-              </Link>
-            </li>
-          )}
+          {isLoggedIn &&
+            profile?.userId === "Ua3123cb2be4dfaf29a66e1ac453575b2" && (
+              <li>
+                <Link to="login" onClick={() => setIsNavOpen(false)}>
+                  <HiOutlineCog6Tooth />
+                  <span>管理員登入</span>
+                </Link>
+              </li>
+            )}
 
           {!isLoggedIn && (
             <li>

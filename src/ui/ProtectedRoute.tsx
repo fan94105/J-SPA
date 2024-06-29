@@ -1,90 +1,26 @@
-import { createContext, useContext, useEffect, useState } from "react"
-import { useLiff } from "react-liff"
-import { Profile } from "../types/global"
-import { useAppointment } from "../features/appointments/useAppointment"
-import styled from "styled-components"
-import Button from "./Button"
-import { NavLink } from "react-router-dom"
-
-const StyledContainer = styled.div`
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
-const StyledUnauthorized = styled.div`
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
-`
-
-type ProfileContextType = {
-  profile: Profile | null
-}
-
-const ProfileContext = createContext<ProfileContextType>(null!)
+import React, { useEffect } from "react"
+import { useUser } from "../features/authentication/useUser"
+import Spinner from "./Spinner"
+import { useNavigate } from "react-router-dom"
 
 type ProtectedRouteProps = {
   children: React.ReactNode
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const [profile, setProfile] = useState<Profile | null>(null)
+  const navigate = useNavigate()
 
-  const { isLoggedIn, liff } = useLiff()
-
-  const { appointment } = useAppointment()
-
-  const redirectPath = sessionStorage.getItem("redirectPath") || ""
+  const { isPendingUser, isAuthenticated } = useUser()
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      liff.login({
-        redirectUri: `${import.meta.env.VITE_APP_URL}${redirectPath}`,
-      })
-    } else {
-      liff
-        .getProfile()
-        .then((profile) => {
-          setProfile(profile)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+    if (!isPendingUser && !isAuthenticated) {
+      navigate("/login")
     }
-  }, [isLoggedIn])
+  }, [isPendingUser, isAuthenticated, navigate])
 
-  if (isLoggedIn) {
-    if (appointment && appointment?.lineId !== profile?.userId) {
-      return (
-        <StyledContainer>
-          <StyledUnauthorized>
-            <div>權限不足，無法查看</div>
+  if (isPendingUser) return <Spinner />
 
-            <Button>
-              <NavLink to="/">回首頁</NavLink>
-            </Button>
-          </StyledUnauthorized>
-        </StyledContainer>
-      )
-    }
-
-    return (
-      <ProfileContext.Provider value={{ profile }}>
-        {children}
-      </ProfileContext.Provider>
-    )
-  }
+  if (isAuthenticated) return children
 }
 
-function useProfile() {
-  const context = useContext(ProfileContext)
-
-  if (!context)
-    throw new Error("useProfile must be used within a ProfileProvider")
-
-  return context
-}
-
-export { ProtectedRoute, useProfile }
+export default ProtectedRoute

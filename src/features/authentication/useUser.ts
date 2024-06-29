@@ -9,8 +9,6 @@ export function useUser() {
 
   const isAuthenticated = user?.role === "authenticated"
 
-  console.log("isAuthenticated", isAuthenticated)
-
   return {
     user,
     isPendingUser,
