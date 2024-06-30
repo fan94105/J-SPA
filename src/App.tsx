@@ -12,7 +12,14 @@ import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
 import ProtectedRoute from "./ui/ProtectedRoute"
 
+import VConsole from "vconsole"
+
 function App() {
+  const vConsole = new VConsole()
+
+  // close vConsole
+  vConsole.destroy()
+
   return (
     <>
       <GlobalStyles />

@@ -22,11 +22,20 @@ export function LiffContextProvider({ children }: LiffContextProviderProps) {
     liff
       .init({
         liffId: import.meta.env.VITE_LIFF_ID,
-        withLoginOnExternalBrowser: true,
+        // withLoginOnExternalBrowser: true,
       })
       .then(() => {
         setInitedLiff(liff)
         setStatus("inited")
+
+        if (!liff.isInClient()) {
+          const redirectUri = window.location.href
+          if (!liff.isLoggedIn()) {
+            liff.login({
+              redirectUri,
+            })
+          }
+        }
       })
   }, [])
 

@@ -14,7 +14,7 @@ type FormValues = {
   observations: string | null
   serviceId: string
   option: { value: string; label: string } | null
-  date: Date
+  date: Date | undefined
   time: string
 }
 

@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useServices } from "../features/service/useServices"
 import Spinner from "./Spinner"
 import { FormValues } from "../types/global"
+import { setSessionFormData } from "../utils/helpers"
 
 const StyledSelectableCard = styled.div``
 
@@ -86,7 +87,7 @@ function SelectableCard({ name, register }: SelectableCardProps) {
               {...register(name, {
                 required: "請選擇一項服務",
                 onChange: (e) => {
-                  sessionStorage.setItem("serviceId", e.target.value)
+                  setSessionFormData({ serviceId: e.target.value })
                 },
               })}
               type="radio"

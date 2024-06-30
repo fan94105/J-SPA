@@ -12,6 +12,21 @@ export async function getAppointments() {
   return data
 }
 
+export async function getAppointmentsByLineId(lineId: string) {
+  let { data, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .eq("lineId", lineId)
+    .eq("status", "confirmed")
+
+  if (error) {
+    console.error(error)
+    throw new Error(`LineID ${lineId} appointments could not be loaded`)
+  }
+
+  return data
+}
+
 export async function getAppointment(id: string) {
   const { data, error } = await supabase
     .from("appointments")

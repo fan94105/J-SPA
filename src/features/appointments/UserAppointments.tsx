@@ -6,6 +6,8 @@ import { Link } from "react-router-dom"
 import AppointmentItem from "./AppointmentItem"
 import Menus from "../../ui/Menus"
 import { useLiff } from "../../context/LiffContext"
+import liff from "@line/liff"
+import { useUsersAppointments } from "./useUsersAppointments"
 
 const StyledUserAppointment = styled.section`
   min-height: 100dvh;
@@ -45,27 +47,23 @@ const StyledList = styled.ul`
 function UserAppointments() {
   const { profile } = useLiff()
 
-  const { appointments, isPendingAppointments } = useAppointments()
+  const { userAppointments, isPendingUserAppointments } = useUsersAppointments(
+    profile?.userId!
+  )
 
-  const userAppointments = appointments
-    ?.filter(
-      (appointment) =>
-        appointment.lineId === profile?.userId &&
-        appointment.status === "confirmed"
-    )
-    .sort((a, b) => {
-      // 首先按照 date 进行升序排序
-      if (a.date! < b.date!) return -1
-      if (a.date! > b.date!) return 1
+  const sortedUserAppointments = userAppointments?.sort((a, b) => {
+    // 首先按照 date 进行升序排序
+    if (a.date! < b.date!) return -1
+    if (a.date! > b.date!) return 1
 
-      // 如果 date 相同，则按照 startTime 进行升序排序
-      if (a.startTime! < b.startTime!) return -1
-      if (a.startTime! > b.startTime!) return 1
+    // 如果 date 相同，则按照 startTime 进行升序排序
+    if (a.startTime! < b.startTime!) return -1
+    if (a.startTime! > b.startTime!) return 1
 
-      return 0 // 如果 startTime 也相同，则顺序不变
-    })
+    return 0 // 如果 startTime 也相同，则顺序不变
+  })
 
-  if (isPendingAppointments) return <Spinner />
+  if (isPendingUserAppointments) return <Spinner />
 
   return (
     <StyledUserAppointment>
@@ -73,7 +71,7 @@ function UserAppointments() {
         <Heading as="h1">我的預約</Heading>
       </StyledHeader>
 
-      {!userAppointments?.length && (
+      {sortedUserAppointments?.length === 0 && (
         <StyledEmpty>
           <p>目前沒有預約...</p>
 
@@ -83,7 +81,7 @@ function UserAppointments() {
 
       <Menus>
         <StyledList>
-          {userAppointments?.map((appointment) => (
+          {sortedUserAppointments?.map((appointment) => (
             <li key={appointment.id}>
               <AppointmentItem appointment={appointment} />
             </li>

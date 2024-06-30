@@ -7,7 +7,6 @@ export function useOutsideClick(handler: () => void, listenCapturing = true) {
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         handler()
-        console.log("clicked outside")
       }
     }
 

@@ -16,6 +16,11 @@ import { useEditAppointment } from "./useEditAppointment"
 import { useOptions } from "../option/useOptions"
 import { useServices } from "../service/useServices"
 import { useLiff } from "../../context/LiffContext"
+import {
+  clearSessionFormData,
+  getSessionFormData,
+  setSessionFormData,
+} from "../../utils/helpers"
 
 const StyledAppointmentForm = styled.section`
   width: 80%;
@@ -95,37 +100,40 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
   if (isEditSession) {
     const defaultOption = options?.find((option) => option.id === optionId)
 
-    if (defaultOption)
-      sessionStorage.setItem(
-        "option",
-        JSON.stringify({
-          value: String(defaultOption?.id),
-          label: `${defaultOption?.name} (${defaultOption?.duration}) 分鐘 ${defaultOption?.price} 元`,
-        })
-      )
+    const editFormData = {
+      displayName,
+      phone,
+      observations,
+      serviceId: String(serviceId!),
+      date: String(date),
+      time: startTime?.slice(0, 5)!,
+      option: defaultOption
+        ? {
+            value: String(defaultOption?.id),
+            label: `${defaultOption?.name} (${defaultOption?.duration}) 分鐘 ${defaultOption?.price} 元`,
+          }
+        : null,
+    }
 
-    sessionStorage.setItem("displayName", displayName!)
-    sessionStorage.setItem("phone", phone!)
-    sessionStorage.setItem("observations", observations || "")
-    sessionStorage.setItem("serviceId", String(serviceId!))
-    sessionStorage.setItem("date", String(date))
-    sessionStorage.setItem("time", startTime?.slice(0, 5)!)
+    setSessionFormData(editFormData)
   }
 
-  let defaultValues = {
-    displayName: profile?.displayName || "",
-    phone: sessionStorage.getItem("phone") || "",
-    observations: sessionStorage.getItem("observations") || null,
-    serviceId: sessionStorage.getItem("serviceId") || "",
-    option: JSON.parse(sessionStorage.getItem("option") as string) || undefined,
-    date: sessionStorage.getItem("date")
-      ? new Date(sessionStorage.getItem("date") as string)
-      : undefined,
-    time: sessionStorage.getItem("time") || "",
+  const formData = getSessionFormData()
+
+  const defaultValues: FormValues = {
+    displayName: formData?.displayName || profile?.displayName || "",
+    phone: formData?.phone || "",
+    observations: formData?.observations || null,
+    serviceId: formData?.serviceId || "",
+    option: formData?.option || null,
+    date: (formData?.date && new Date(formData?.date)) || undefined,
+    time: formData?.time || "",
   }
 
   const { handleSubmit, register, control, formState, reset } =
-    useForm<FormValues>()
+    useForm<FormValues>({
+      defaultValues,
+    })
   const { errors } = formState
 
   const { currentStepIndex, step, steps, isFirstStep, isLastStep, next, back } =
@@ -158,7 +166,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
       observations: data.observations,
       serviceId: +data.serviceId,
       optionId: option ? option?.id : null,
-      date: moment(data.date).format("YYYY-MM-DD"),
+      date: moment(data.date?.toISOString()).format("YYYY-MM-DD"),
       startTime: `${data.time}:00`,
       endTime: moment(data.time, "HH:mm")
         .add(service?.duration, "minutes")
@@ -175,14 +183,12 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
       status: "confirmed",
     }
 
-    console.log(newAppointment)
-
     if (!isEditSession)
       createAppointment(newAppointment, {
         onSuccess: () => {
           reset()
 
-          sessionStorage.clear()
+          clearSessionFormData()
 
           navigate("/appointments")
         },
@@ -195,7 +201,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
           onSuccess: () => {
             reset()
 
-            sessionStorage.clear()
+            clearSessionFormData()
 
             navigate("/appointments")
           },
@@ -205,7 +211,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
 
   useEffect(() => {
     reset(defaultValues)
-  }, [editId, profile])
+  }, [profile])
 
   return (
     <StyledAppointmentForm>

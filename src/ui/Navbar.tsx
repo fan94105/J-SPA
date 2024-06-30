@@ -14,6 +14,7 @@ import ButtonIcon from "./ButtonIcon"
 import { useOutsideClick } from "../hooks/useOutsideClick"
 import { tablet } from "../styles/device"
 import { useLiff } from "../context/LiffContext"
+import { clearSessionFormData } from "../utils/helpers"
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -188,6 +189,12 @@ function Navbar() {
     setIsNavOpen((isNavOpen) => !isNavOpen)
   }
 
+  const handleChangeUrl = () => {
+    clearSessionFormData()
+
+    setIsNavOpen(false)
+  }
+
   const handleLogin = () => {
     login?.()
   }
@@ -237,27 +244,13 @@ function Navbar() {
           {isLoggedIn && (
             <>
               <li>
-                <Link
-                  to="appointment"
-                  onClick={() => {
-                    sessionStorage.clear()
-                    sessionStorage.setItem("redirectPath", "/appointment")
-                    setIsNavOpen(false)
-                  }}
-                >
+                <Link to="appointment" onClick={handleChangeUrl}>
                   <HiOutlineCalendarDays />
                   <span>線上預約</span>
                 </Link>
               </li>
               <li>
-                <Link
-                  to="appointments"
-                  onClick={() => {
-                    sessionStorage.clear()
-                    sessionStorage.setItem("redirectPath", "/appointments")
-                    setIsNavOpen(false)
-                  }}
-                >
+                <Link to="appointments" onClick={handleChangeUrl}>
                   <HiOutlineUser />
                   <span>我的預約</span>
                 </Link>
@@ -268,7 +261,7 @@ function Navbar() {
           {isLoggedIn &&
             profile?.userId === "Ua3123cb2be4dfaf29a66e1ac453575b2" && (
               <li>
-                <Link to="login" onClick={() => setIsNavOpen(false)}>
+                <Link to="login" onClick={handleChangeUrl}>
                   <HiOutlineCog6Tooth />
                   <span>管理員登入</span>
                 </Link>

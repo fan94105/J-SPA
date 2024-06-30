@@ -7,6 +7,7 @@ import { Control, Controller } from "react-hook-form"
 import FormErrorMsg from "../../ui/FormErrorMsg"
 import moment from "moment"
 import { FormValues } from "../../types/global"
+import { setSessionFormData } from "../../utils/helpers"
 
 const StyledCalendarContainer = styled.div`
   .react-calendar {
@@ -80,10 +81,10 @@ function DateForm({ control, error }: DateFormProps) {
               value={field.value}
               onChange={(e) => {
                 onChange(moment(e as Date).toLocaleString())
-                sessionStorage.setItem(
-                  "date",
-                  JSON.stringify(moment(e as Date).toLocaleString())
-                )
+
+                setSessionFormData({
+                  date: moment(e as Date).toLocaleString(),
+                })
               }}
               minDate={new Date()}
               formatDay={(_, date) =>

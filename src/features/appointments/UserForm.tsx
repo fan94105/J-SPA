@@ -3,6 +3,7 @@ import FormRow from "../../ui/FormRow"
 import FormWrapper from "../../ui/FormWrapper"
 import { FieldErrors, UseFormRegister } from "react-hook-form"
 import { FormValues } from "../../types/global"
+import { setSessionFormData } from "../../utils/helpers"
 
 type UserFormProps = {
   register: UseFormRegister<FormValues>
@@ -17,7 +18,8 @@ function UserForm({ register, errors }: UserFormProps) {
           {...register("displayName", {
             required: "請輸入姓名",
             onChange: (e) => {
-              sessionStorage.setItem("displayName", e.target.value)
+              // sessionStorage.setItem("displayName", e.target.value)
+              setSessionFormData({ displayName: e.target.value })
             },
           })}
           type="text"
@@ -34,7 +36,8 @@ function UserForm({ register, errors }: UserFormProps) {
               message: "請輸入正確的手機號碼，範例：0912345678",
             },
             onChange: (e) => {
-              sessionStorage.setItem("phone", e.target.value)
+              // sessionStorage.setItem("phone", e.target.value)
+              setSessionFormData({ phone: e.target.value })
             },
           })}
           type="telphone"
@@ -47,7 +50,8 @@ function UserForm({ register, errors }: UserFormProps) {
           {...register("observations")}
           onChange={(e) => {
             register("observations").onChange(e)
-            sessionStorage.setItem("observations", e.target.value)
+
+            setSessionFormData({ observations: e.target.value })
           }}
           id="observations"
           rows={1}

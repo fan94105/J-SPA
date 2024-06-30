@@ -3,6 +3,7 @@ import { UseFormRegister } from "react-hook-form"
 import styled, { css } from "styled-components"
 import { FormValues } from "../types/global"
 import { laptop } from "../styles/device"
+import { setSessionFormData } from "../utils/helpers"
 
 const StyledSelectableTime = styled.div`
   display: grid;
@@ -81,7 +82,8 @@ function SelectableTime({ name, items, register }: SelectableTimeProps) {
             {...register(name, { required: "請選擇預約時段" })}
             onChange={(e) => {
               register(name).onChange(e)
-              sessionStorage.setItem(name, e.target.value)
+
+              setSessionFormData({ [`${name}`]: e.target.value })
             }}
             type="radio"
             id={time}

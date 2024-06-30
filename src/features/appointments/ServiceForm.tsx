@@ -1,12 +1,18 @@
 import FormWrapper from "../../ui/FormWrapper"
 import SelectableCard from "../../ui/SelectableCard"
 import Select from "react-select"
-import { Control, Controller, UseFormRegister } from "react-hook-form"
+import {
+  Control,
+  Controller,
+  UseFormGetValues,
+  UseFormRegister,
+} from "react-hook-form"
 import FormErrorMsg from "../../ui/FormErrorMsg"
 import { useOptions } from "../option/useOptions"
 import { FormValues } from "../../types/global"
 import styled, { css } from "styled-components"
 import { desktop } from "../../styles/device"
+import { setSessionFormData } from "../../utils/helpers"
 
 const StyledSelectContainer = styled.div`
   ${desktop(css`
@@ -42,7 +48,8 @@ function ServiceForm({ register, control, error }: ServiceFormProps) {
             <Select
               {...field}
               onChange={(e) => {
-                sessionStorage.setItem("option", JSON.stringify(e))
+                setSessionFormData({ option: e })
+
                 onChange(e)
               }}
               options={selectOptions}
