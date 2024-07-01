@@ -13,6 +13,10 @@ import Dashboard from "./pages/Dashboard"
 import ProtectedRoute from "./ui/ProtectedRoute"
 
 import VConsole from "vconsole"
+import DashboardAppointments from "./pages/DashboardAppointments"
+import DashboardLayout from "./ui/DashboardLayout"
+import DashboardServices from "./pages/DashboardServices"
+import DashboardOptions from "./pages/DashboardOptions"
 
 function App() {
   const vConsole = new VConsole()
@@ -48,10 +52,18 @@ function App() {
               path="dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <DashboardLayout />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<Dashboard />} />
+
+              <Route path="appointments" element={<DashboardAppointments />} />
+
+              <Route path="services" element={<DashboardServices />} />
+
+              <Route path="options" element={<DashboardOptions />} />
+            </Route>
 
             <Route path="*" element={<NotFound />} />
           </Route>

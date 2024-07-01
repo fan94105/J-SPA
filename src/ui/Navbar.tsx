@@ -5,8 +5,12 @@ import {
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineArrowRightOnRectangle,
   HiOutlineBars3BottomRight,
+  HiOutlineBookmarkSquare,
   HiOutlineCalendarDays,
   HiOutlineCog6Tooth,
+  HiOutlineRocketLaunch,
+  HiOutlineSparkles,
+  HiOutlineSquaresPlus,
   HiOutlineUser,
   HiOutlineXMark,
 } from "react-icons/hi2"
@@ -15,6 +19,8 @@ import { useOutsideClick } from "../hooks/useOutsideClick"
 import { tablet } from "../styles/device"
 import { useLiff } from "../context/LiffContext"
 import { clearSessionFormData } from "../utils/helpers"
+import { useUser } from "../features/authentication/useUser"
+import { useLogout } from "../features/authentication/useLogout"
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -181,6 +187,10 @@ function Navbar() {
 
   const { isLoggedIn, profile, login, logout } = useLiff()
 
+  const { isAuthenticated } = useUser()
+
+  const { authLogout, isPendingLogout } = useLogout()
+
   const ref = useOutsideClick(() => setIsNavOpen(false))
 
   const navigate = useNavigate()
@@ -200,13 +210,17 @@ function Navbar() {
   }
 
   const handleLogout = () => {
+    if (isAuthenticated) {
+      authLogout?.()
+    }
+
     logout?.()
 
     sessionStorage.clear()
 
     setIsNavOpen(false)
 
-    navigate("/")
+    navigate("/", { replace: true })
   }
 
   useEffect(() => {
@@ -258,15 +272,46 @@ function Navbar() {
             </>
           )}
 
-          {isLoggedIn &&
-            profile?.userId === "Ua3123cb2be4dfaf29a66e1ac453575b2" && (
+          {isLoggedIn && !isAuthenticated && (
+            <li>
+              <Link to="login" onClick={handleChangeUrl}>
+                <HiOutlineCog6Tooth />
+                <span>管理員登入</span>
+              </Link>
+            </li>
+          )}
+
+          {isAuthenticated && (
+            <>
               <li>
-                <Link to="login" onClick={handleChangeUrl}>
-                  <HiOutlineCog6Tooth />
-                  <span>管理員登入</span>
+                <Link to="dashboard" onClick={handleChangeUrl}>
+                  <HiOutlineSquaresPlus />
+                  <span>總覽</span>
                 </Link>
               </li>
-            )}
+
+              <li>
+                <Link to="dashboard/appointments" onClick={handleChangeUrl}>
+                  <HiOutlineBookmarkSquare />
+                  <span>全部預約</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link to="dashboard/services" onClick={handleChangeUrl}>
+                  <HiOutlineRocketLaunch />
+                  <span>全部服務</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link to="dashboard/options" onClick={handleChangeUrl}>
+                  <HiOutlineSparkles />
+                  <span>全部加選</span>
+                </Link>
+              </li>
+            </>
+          )}
 
           {!isLoggedIn && (
             <li>

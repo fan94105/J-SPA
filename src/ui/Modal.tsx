@@ -1,10 +1,4 @@
-import React, {
-  cloneElement,
-  createContext,
-  createElement,
-  useContext,
-  useState,
-} from "react"
+import React, { cloneElement, createContext, useContext, useState } from "react"
 import { createPortal } from "react-dom"
 import { HiXMark } from "react-icons/hi2"
 import styled from "styled-components"
@@ -65,6 +59,7 @@ const Overlay = styled.div`
 `
 
 const StyledModal = styled.div`
+  width: 80%;
   position: fixed;
   top: 50%;
   left: 50%;

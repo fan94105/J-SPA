@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import { useUser } from "../features/authentication/useUser"
 import Spinner from "./Spinner"
 import { useNavigate } from "react-router-dom"
+import FullScreen from "./FullScreen"
 
 type ProtectedRouteProps = {
   children: React.ReactNode
@@ -18,7 +19,12 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
     }
   }, [isPendingUser, isAuthenticated, navigate])
 
-  if (isPendingUser) return <Spinner />
+  if (isPendingUser)
+    return (
+      <FullScreen>
+        <Spinner />
+      </FullScreen>
+    )
 
   if (isAuthenticated) return children
 }
