@@ -60,6 +60,7 @@ const Overlay = styled.div`
 
 const StyledModal = styled.div`
   width: 80%;
+  max-height: 90dvh;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -69,6 +70,7 @@ const StyledModal = styled.div`
   box-shadow: var(--shadow-lg);
   padding: 3.2rem 4rem;
   transition: all 0.5s;
+  overflow-y: auto;
 `
 
 const Button = styled.button`

@@ -1,11 +1,13 @@
-import React from "react"
 import styled from "styled-components"
+import { SubmitHandler, useForm } from "react-hook-form"
+
 import FormRow from "../../ui/FormRow"
 import Button from "../../ui/Button"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { TablesInsert, TablesUpdate } from "../../supabase"
+
 import { useCreateOption } from "./useCreateOption"
 import { useEditOption } from "./useEditOption"
+
+import { TablesInsert, TablesUpdate } from "../../supabase"
 
 const StyledCreateEditOptionForm = styled.form`
   display: flex;
@@ -13,8 +15,14 @@ const StyledCreateEditOptionForm = styled.form`
   gap: 1.6rem;
 `
 
+const StyledBtnRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`
+
 type CreateEditOptionFormProps = {
-  optionToEdit?: TablesInsert<"options"> | TablesUpdate<"options">
+  optionToEdit?: TablesUpdate<"options">
   onCloseModal?: () => void
 }
 
@@ -33,14 +41,16 @@ function CreateEditOptionForm({
   const isWorking = isCreatingOption || isEditingOption
 
   const { register, handleSubmit, formState, reset } = useForm<
-    TablesUpdate<"options">
+    TablesUpdate<"options"> | TablesInsert<"options">
   >({
     defaultValues: isEditSession ? optionToEdit : {},
   })
 
   const { errors } = formState
 
-  const onSubmit: SubmitHandler<TablesUpdate<"options">> = (data) => {
+  const onSubmit: SubmitHandler<
+    TablesUpdate<"options"> | TablesInsert<"options">
+  > = (data) => {
     if (isEditSession) {
       editOption(
         { newOption: data, id: editId! },
@@ -118,9 +128,19 @@ function CreateEditOptionForm({
         />
       </FormRow> */}
 
-      <Button type="submit" disabled={isWorking}>
-        {isEditSession ? "確認修改" : "新增項目"}
-      </Button>
+      <StyledBtnRow>
+        <Button
+          $variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
+          取消
+        </Button>
+
+        <Button type="submit" disabled={isWorking}>
+          {isEditSession ? "確認修改" : "新增項目"}
+        </Button>
+      </StyledBtnRow>
     </StyledCreateEditOptionForm>
   )
 }

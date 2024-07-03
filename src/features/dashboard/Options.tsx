@@ -18,11 +18,11 @@ function Options() {
       <OptionsTable />
 
       <Modal>
-        <Modal.Open name="create">
+        <Modal.Open name="create-option">
           <Button>新增加選項目</Button>
         </Modal.Open>
 
-        <Modal.Window name="create">
+        <Modal.Window name="create-option">
           <CreateEditOptionForm />
         </Modal.Window>
       </Modal>

@@ -39,8 +39,6 @@ function LoginForm() {
   const { errors } = formState
 
   const onSubmit: SubmitHandler<AuthFormValues> = (data) => {
-    if (!data.email || !data.password) return
-
     login(data)
   }
 
@@ -51,7 +49,6 @@ function LoginForm() {
           type="email"
           id="email"
           placeholder=""
-          autoFocus
           disabled={isLogin}
           {...register("email", {
             required: "請輸入電子郵件",

@@ -17,6 +17,7 @@ import DashboardAppointments from "./pages/DashboardAppointments"
 import DashboardLayout from "./ui/DashboardLayout"
 import DashboardServices from "./pages/DashboardServices"
 import DashboardOptions from "./pages/DashboardOptions"
+import ServiceDetail from "./features/service/ServiceDetail"
 
 function App() {
   const vConsole = new VConsole()
@@ -61,6 +62,8 @@ function App() {
               <Route path="appointments" element={<DashboardAppointments />} />
 
               <Route path="services" element={<DashboardServices />} />
+
+              <Route path="services/:serviceId" element={<ServiceDetail />} />
 
               <Route path="options" element={<DashboardOptions />} />
             </Route>

@@ -1,7 +1,13 @@
 import React from "react"
 
+import Services from "../features/dashboard/Services"
+
 function DashboardServices() {
-  return <div>DashboardServices</div>
+  return (
+    <>
+      <Services />
+    </>
+  )
 }
 
 export default DashboardServices

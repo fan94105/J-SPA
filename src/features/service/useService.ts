@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import { getService } from "../../services/apiServices"
 
-export function useService(id: string) {
+export function useService(id: number) {
   const { data: service, isPending: isPendingService } = useQuery({
-    queryKey: ["service", id],
+    queryKey: ["services", id],
     queryFn: () => getService(id),
   })
 

@@ -17,7 +17,7 @@ function OptionRow({ option }: OptionRowProps) {
 
   return (
     <>
-      <Table.Row key={option.id}>
+      <Table.Row>
         <div>{option.name}</div>
         <div>{option.price}</div>
         <div>{option.duration}</div>
