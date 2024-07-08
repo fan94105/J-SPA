@@ -1,12 +1,14 @@
-import { useAppointments } from "./useAppointments"
-import Spinner from "../../ui/Spinner"
 import styled from "styled-components"
-import Heading from "../../ui/Heading"
 import { Link } from "react-router-dom"
-import AppointmentItem from "./AppointmentItem"
+
+import Spinner from "../../ui/Spinner"
+import Heading from "../../ui/Heading"
 import Menus from "../../ui/Menus"
+import FullScreen from "../../ui/FullScreen"
+
+import AppointmentItem from "./AppointmentItem"
+
 import { useLiff } from "../../context/LiffContext"
-import liff from "@line/liff"
 import { useUsersAppointments } from "./useUsersAppointments"
 
 const StyledUserAppointment = styled.section`
@@ -63,7 +65,12 @@ function UserAppointments() {
     return 0 // 如果 startTime 也相同，则顺序不变
   })
 
-  if (isPendingUserAppointments) return <Spinner />
+  if (isPendingUserAppointments)
+    return (
+      <FullScreen>
+        <Spinner />
+      </FullScreen>
+    )
 
   return (
     <StyledUserAppointment>

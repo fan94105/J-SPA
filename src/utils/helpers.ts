@@ -1,3 +1,5 @@
+import moment from "moment"
+
 export function getSessionFormData() {
   return sessionStorage.getItem("formData")
     ? JSON.parse(sessionStorage.getItem("formData") as string)
@@ -16,4 +18,8 @@ export function setSessionFormData(formData: any) {
 
 export function clearSessionFormData() {
   sessionStorage.removeItem("formData")
+}
+
+export function isToday(dateString: string) {
+  return moment(dateString).isSame(moment(), "day")
 }

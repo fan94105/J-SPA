@@ -1,7 +1,11 @@
-import React from "react"
+import Appointments from "../features/dashboard/Appointments"
 
 function DashboardAppointments() {
-  return <div>DashboardAppointments</div>
+  return (
+    <>
+      <Appointments />
+    </>
+  )
 }
 
 export default DashboardAppointments

@@ -1,23 +1,25 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import VConsole from "vconsole"
 
 import AppLayout from "./ui/AppLayout"
+import ProtectedRoute from "./ui/ProtectedRoute"
+import DashboardLayout from "./ui/DashboardLayout"
 import Home from "./pages/Home"
 import Appointment from "./pages/Appointment"
-import GlobalStyles from "./styles/GlobalStyles"
 import NotFound from "./pages/NotFound"
 import Appointments from "./pages/Appointments"
-import AppointmentDetail from "./features/appointments/AppointmentDetail"
-import EditAppointment from "./pages/EditAppointment"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
-import ProtectedRoute from "./ui/ProtectedRoute"
-
-import VConsole from "vconsole"
+import EditAppointment from "./pages/EditAppointment"
 import DashboardAppointments from "./pages/DashboardAppointments"
-import DashboardLayout from "./ui/DashboardLayout"
 import DashboardServices from "./pages/DashboardServices"
 import DashboardOptions from "./pages/DashboardOptions"
+import DashboardCheck from "./pages/DashboardCheck"
+import DashboardAppointmentDetail from "./pages/DashboardAppointmentDetail"
+import AppointmentDetail from "./features/appointments/AppointmentDetail"
 import ServiceDetail from "./features/service/ServiceDetail"
+
+import GlobalStyles from "./styles/GlobalStyles"
 
 function App() {
   const vConsole = new VConsole()
@@ -59,7 +61,14 @@ function App() {
             >
               <Route index element={<Dashboard />} />
 
+              <Route path="check/:appointmentId" element={<DashboardCheck />} />
+
               <Route path="appointments" element={<DashboardAppointments />} />
+
+              <Route
+                path="appointments/:appointmentId"
+                element={<DashboardAppointmentDetail />}
+              />
 
               <Route path="services" element={<DashboardServices />} />
 

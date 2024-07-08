@@ -1,15 +1,18 @@
-import React from "react"
+import moment from "moment"
+import { UseFormRegister } from "react-hook-form"
+import { useParams } from "react-router-dom"
+
 import FormWrapper from "../../ui/FormWrapper"
 import SelectableTime from "../../ui/SelectableTime"
-import { UseFormRegister, useForm, useFormState } from "react-hook-form"
 import FormErrorMsg from "../../ui/FormErrorMsg"
-import { FormValues } from "../../types/global"
-import { useAppointments } from "./useAppointments"
-import moment from "moment"
 import Spinner from "../../ui/Spinner"
+
 import { useServices } from "../service/useServices"
 import { useOptions } from "../option/useOptions"
-import { useParams } from "react-router-dom"
+import { useAppointmentsByDate } from "./useAppointmentsByDate"
+
+import { FormValues } from "../../types/global"
+import { getSessionFormData } from "../../utils/helpers"
 
 const times = [
   "09:00",
@@ -45,17 +48,15 @@ function TimeForm({ register, error }: TimeFormProps) {
 
   const isEditSession = Boolean(appointmentId)
 
-  const { appointments, isPendingAppointments } = useAppointments()
-
   const { services, isPendingServices } = useServices()
 
   const { options, isPendingOptions } = useOptions()
 
-  const selectedServiceId = sessionStorage.getItem("serviceId")
+  const formData = getSessionFormData()
 
-  const selectedOptionObj = sessionStorage.getItem("option")
-    ? JSON.parse(sessionStorage.getItem("option") as string)
-    : null
+  const selectedServiceId = formData.serviceId
+
+  const selectedOptionObj = formData.option ? formData.option : null
 
   const selectedService = services?.find(
     (service) => service.id === +selectedServiceId!
@@ -70,19 +71,17 @@ function TimeForm({ register, error }: TimeFormProps) {
     : selectedService?.duration!
 
   const selectedDate = moment(
-    new Date(sessionStorage.getItem("date") as string)
+    new Date(getSessionFormData().date as string)
   ).format("YYYY-MM-DD")
 
-  if (isPendingAppointments || isPendingServices || isPendingOptions)
-    return <Spinner />
+  const { appointmentsByDate, isPendingAppointmentsByDate } =
+    useAppointmentsByDate(selectedDate)
 
   // 當日已有預約
   const filteredAppointments = !isEditSession
-    ? appointments?.filter((appointment) => appointment.date === selectedDate)
-    : appointments?.filter(
-        (appointment) =>
-          appointment.date === selectedDate &&
-          appointment.id !== +appointmentId!
+    ? appointmentsByDate
+    : appointmentsByDate?.filter(
+        (appointment) => appointment.id !== +appointmentId!
       )
 
   const items = !filteredAppointments?.length
@@ -110,6 +109,9 @@ function TimeForm({ register, error }: TimeFormProps) {
 
         return !overlaps
       })
+
+  if (isPendingAppointmentsByDate || isPendingServices || isPendingOptions)
+    return <Spinner />
 
   return (
     <FormWrapper title="預約時間">

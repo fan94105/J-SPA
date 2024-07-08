@@ -1,26 +1,24 @@
-import { useEffect } from "react"
-import Heading from "../../ui/Heading"
 import styled from "styled-components"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import moment from "moment"
+
+import Heading from "../../ui/Heading"
 import Button from "../../ui/Button"
-import useMultistepForm from "../../hooks/useMultistepForm"
 import DateForm from "./DateForm"
 import UserForm from "./UserForm"
 import ServiceForm from "./ServiceForm"
 import TimeForm from "./TimeForm"
-import { SubmitHandler, useForm } from "react-hook-form"
-import moment from "moment"
-import { useCreateAppointment } from "./useCreateAppointment"
-import { useNavigate } from "react-router-dom"
-import { Appointment, FormValues } from "../../types/global"
-import { useEditAppointment } from "./useEditAppointment"
-import { useOptions } from "../option/useOptions"
-import { useServices } from "../service/useServices"
+
+import { clearSessionFormData, getSessionFormData } from "../../utils/helpers"
 import { useLiff } from "../../context/LiffContext"
-import {
-  clearSessionFormData,
-  getSessionFormData,
-  setSessionFormData,
-} from "../../utils/helpers"
+import { useServices } from "../service/useServices"
+import { useOptions } from "../option/useOptions"
+import { useCreateAppointment } from "./useCreateAppointment"
+import { useEditAppointment } from "./useEditAppointment"
+import useMultistepForm from "../../hooks/useMultistepForm"
+
+import { Appointment, FormValues } from "../../types/global"
 
 const StyledAppointmentForm = styled.section`
   width: 80%;
@@ -78,16 +76,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
 
   const { options, isPendingOptions } = useOptions()
 
-  const {
-    id: editId,
-    displayName,
-    phone,
-    observations,
-    date,
-    startTime,
-    serviceId,
-    optionId,
-  } = appointmentToEdit as Appointment
+  const { id: editId } = appointmentToEdit as Appointment
 
   const isEditSession = Boolean(editId)
 
@@ -96,27 +85,6 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
     isEditingAppointment ||
     isPendingServices ||
     isPendingOptions
-
-  if (isEditSession) {
-    const defaultOption = options?.find((option) => option.id === optionId)
-
-    const editFormData = {
-      displayName,
-      phone,
-      observations,
-      serviceId: String(serviceId!),
-      date: String(date),
-      time: startTime?.slice(0, 5)!,
-      option: defaultOption
-        ? {
-            value: String(defaultOption?.id),
-            label: `${defaultOption?.name} (${defaultOption?.duration}) 分鐘 ${defaultOption?.price} 元`,
-          }
-        : null,
-    }
-
-    setSessionFormData(editFormData)
-  }
 
   const formData = getSessionFormData()
 
@@ -166,7 +134,7 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
       observations: data.observations,
       serviceId: +data.serviceId,
       optionId: option ? option?.id : null,
-      date: moment(data.date?.toISOString()).format("YYYY-MM-DD"),
+      date: moment(data.date).format("YYYY-MM-DD"),
       startTime: `${data.time}:00`,
       endTime: moment(data.time, "HH:mm")
         .add(service?.duration, "minutes")
@@ -209,9 +177,9 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
       )
   }
 
-  useEffect(() => {
-    reset(defaultValues)
-  }, [profile])
+  // useEffect(() => {
+  //   reset(defaultValues)
+  // }, [profile])
 
   return (
     <StyledAppointmentForm>

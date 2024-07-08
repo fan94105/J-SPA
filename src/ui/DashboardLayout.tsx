@@ -4,8 +4,8 @@ import styled from "styled-components"
 
 const StyledDashboardLayout = styled.div`
   width: 80%;
-  height: 100dvh;
-  padding-top: 8rem;
+  height: 100%;
+  padding: 8rem 0 4rem;
   margin: 0 auto;
 `
 

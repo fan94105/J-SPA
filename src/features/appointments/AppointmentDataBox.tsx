@@ -12,6 +12,7 @@ import {
 import DataItem from "../../ui/DataItem"
 import { Appointment, Option, Service } from "../../types/global"
 import { laptop, tablet } from "../../styles/device"
+import { isToday } from "../../utils/helpers"
 
 const StyledAppointmentDataBox = styled.section`
   /* Box */
@@ -110,6 +111,11 @@ function AppointmentDataBox({
   service,
   option,
 }: AppointmentDataBoxProps) {
+  console.log(appointment.date)
+  const date = isToday(appointment.date!)
+    ? "今天"
+    : moment(appointment.date).format("YYYY/MM/DD ddd")
+
   return (
     <StyledAppointmentDataBox>
       <Header>
@@ -118,9 +124,7 @@ function AppointmentDataBox({
           <p>{service.name}</p>
         </div>
 
-        <StyledDate>
-          {moment(appointment.date).format("YYYY/MM/DD ddd")}{" "}
-        </StyledDate>
+        <StyledDate>{date}</StyledDate>
 
         <p>
           {appointment.startTime?.slice(0, 5)}-

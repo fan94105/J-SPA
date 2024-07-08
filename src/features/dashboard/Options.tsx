@@ -4,6 +4,7 @@ import Modal from "../../ui/Modal"
 import Button from "../../ui/Button"
 import CreateEditOptionForm from "../option/CreateEditOptionForm"
 import styled from "styled-components"
+import Heading from "../../ui/Heading"
 
 const StyledOptions = styled.section`
   display: flex;
@@ -12,9 +13,18 @@ const StyledOptions = styled.section`
   gap: 2rem;
 `
 
+const StyledHeader = styled.div`
+  width: 100%;
+  text-align: center;
+`
+
 function Options() {
   return (
     <StyledOptions>
+      <StyledHeader>
+        <Heading as="h1">全部加選項目</Heading>
+      </StyledHeader>
+
       <OptionsTable />
 
       <Modal>

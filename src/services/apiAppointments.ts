@@ -1,19 +1,64 @@
 import { TablesInsert, TablesUpdate } from "../supabase"
+import { PAGE_SIZE } from "../utils/constants"
 import supabase from "./supabase"
 
-export async function getAppointments() {
-  let { data, error } = await supabase.from("appointments").select("*")
+type getAppointmentsType = {
+  filter: { field: string; value: string } | null
+  sortBy: {
+    field: string
+    direction: string
+  }
+  page: number
+}
+
+export async function getAppointments({
+  filter,
+  sortBy,
+  page,
+}: getAppointmentsType) {
+  let query = supabase.from("appointments").select("*", { count: "exact" })
+
+  // FILTER
+  if (filter) query = query.eq(filter.field, filter.value)
+
+  // SORT
+  if (sortBy)
+    query = query.order(sortBy.field, { ascending: sortBy.direction === "asc" })
+
+  // PAGINATION
+  if (page) {
+    const from = (page - 1) * PAGE_SIZE
+    const to = from + PAGE_SIZE - 1
+
+    query = query.range(from, to)
+  }
+
+  const { data, count, error } = await query
 
   if (error) {
     console.error(error)
     throw new Error("Appointments could not be loaded")
   }
 
+  return { data, count }
+}
+
+export async function getAppointmentsByDate(date: string) {
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .eq("date", date)
+
+  if (error) {
+    console.error(error)
+    throw new Error(`Appointments on ${date} could not be loaded`)
+  }
+
   return data
 }
 
 export async function getAppointmentsByLineId(lineId: string) {
-  let { data, error } = await supabase
+  const { data, error } = await supabase
     .from("appointments")
     .select("*")
     .eq("lineId", lineId)

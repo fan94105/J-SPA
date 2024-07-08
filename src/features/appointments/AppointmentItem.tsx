@@ -1,4 +1,3 @@
-import { Appointment } from "../../types/global"
 import styled from "styled-components"
 import {
   HiEye,
@@ -9,19 +8,21 @@ import {
   HiOutlineSparkles,
   HiOutlineTrash,
 } from "react-icons/hi2"
-
 import moment from "moment"
 import "moment/dist/locale/zh-tw"
+import { useNavigate } from "react-router-dom"
+
 import Menus from "../../ui/Menus"
-import { useDeleteAppointment } from "./useDeleteAppointment"
 import Modal from "../../ui/Modal"
 import ConfirmDelete from "../../ui/ConfirmDelete"
-import { useNavigate } from "react-router-dom"
-import { useService } from "../service/useService"
-import { useOption } from "../option/useOption"
+import Spinner from "../../ui/Spinner"
+
 import { useServices } from "../service/useServices"
 import { useOptions } from "../option/useOptions"
-import Spinner from "../../ui/Spinner"
+import { useDeleteAppointment } from "./useDeleteAppointment"
+import { setSessionFormData } from "../../utils/helpers"
+
+import { Appointment } from "../../types/global"
 
 const StyledAppointmentItem = styled.div`
   padding: 1rem;
@@ -89,6 +90,9 @@ function AppointmentItem({ appointment }: AppointmentItemProps) {
 
   const {
     id: appointmentId,
+    displayName,
+    phone,
+    observations,
     date,
     startTime,
     serviceId,
@@ -105,6 +109,26 @@ function AppointmentItem({ appointment }: AppointmentItemProps) {
   }
 
   const handleEditAppointment = () => {
+    const defaultOption = options?.find((option) => option.id === optionId)
+
+    const editFormData = {
+      displayName,
+      phone,
+      observations,
+      serviceId: String(serviceId!),
+      date: date!,
+      time: startTime?.slice(0, 5)!,
+      option: defaultOption
+        ? {
+            value: String(defaultOption?.id),
+            label: `${defaultOption?.name} (${defaultOption?.duration}) 分鐘 ${defaultOption?.price} 元`,
+          }
+        : null,
+    }
+
+    console.log("設定編輯資料")
+    setSessionFormData(editFormData)
+
     navigate(`/appointments/edit/${appointmentId}`)
   }
 

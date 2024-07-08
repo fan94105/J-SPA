@@ -1,24 +1,22 @@
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
-import Heading from "../../ui/Heading"
 import Spinner from "../../ui/Spinner"
-import Button from "../../ui/Button"
 import Modal from "../../ui/Modal"
-import ConfirmDelete from "../../ui/ConfirmDelete"
-import ButtonText from "../../ui/ButtonText"
+import Heading from "../../ui/Heading"
 import Tag from "../../ui/Tag"
-import AppointmentDataBox from "./AppointmentDataBox"
+import ButtonText from "../../ui/ButtonText"
+import Button from "../../ui/Button"
+import ConfirmDelete from "../../ui/ConfirmDelete"
+import AppointmentDataBox from "../appointments/AppointmentDataBox"
 
-import { useAppointment } from "./useAppointment"
-import { useDeleteAppointment } from "./useDeleteAppointment"
+import { useAppointment } from "../appointments/useAppointment"
 import { useServices } from "../service/useServices"
 import { useOptions } from "../option/useOptions"
+import { useDeleteAppointment } from "../appointments/useDeleteAppointment"
 
-const StyledAppointmentDetail = styled.section`
-  width: 80%;
+const StyledDashboardAppointmentDetail = styled.section`
   margin: 0 auto;
-  padding: 8rem 0 6rem;
 `
 
 const StyledHeader = styled.header`
@@ -48,16 +46,16 @@ const statusToTagName: Record<string, string> = {
   completed: "silver",
 }
 
-function AppointmentDetail() {
+function Detail() {
   const navigate = useNavigate()
-
-  const { services, isPendingServices } = useServices()
-  const { options, isPendingOptions } = useOptions()
 
   const { appointment, isPendingAppointment } = useAppointment()
   const tagType = appointment?.status
     ? statusToTagName[appointment?.status]
     : "green"
+
+  const { services, isPendingServices } = useServices()
+  const { options, isPendingOptions } = useOptions()
 
   const service = services?.find(
     (service) => service.id === appointment?.serviceId
@@ -66,18 +64,12 @@ function AppointmentDetail() {
 
   const { deleteAppointment, isDeletingAppointment } = useDeleteAppointment()
 
-  const handleDeleteAppointment = () => {
-    deleteAppointment(String(appointment?.id))
-
-    navigate("/appointments")
-  }
-
   if (isPendingAppointment || isPendingServices || isPendingOptions)
     return <Spinner />
 
   return (
     <Modal>
-      <StyledAppointmentDetail>
+      <StyledDashboardAppointmentDetail>
         <StyledHeader>
           <StyledHeadingGroup>
             <Heading as="h1">預約 #{appointment?.id}</Heading>
@@ -94,22 +86,26 @@ function AppointmentDetail() {
         />
 
         <StyledBtnRow>
-          <Button
-            $variation="secondary"
-            onClick={() => navigate(`/appointments/edit/${appointment?.id}`)}
-          >
-            修改預約
-          </Button>
+          {appointment?.status === "confirmed" && (
+            <Button
+              onClick={() => navigate(`/dashboard/check/${appointment?.id}`)}
+            >
+              完成
+            </Button>
+          )}
+
           <Modal.Open name="delete">
             <Button $variation="danger">刪除預約</Button>
           </Modal.Open>
         </StyledBtnRow>
-      </StyledAppointmentDetail>
+      </StyledDashboardAppointmentDetail>
 
       <Modal.Window name="delete">
         <ConfirmDelete
-          resourceName="預約"
-          onConfirm={handleDeleteAppointment}
+          resourceName={`${appointment?.displayName} 的預約`}
+          onConfirm={() => {
+            deleteAppointment(String(appointment?.id))
+          }}
           disabled={isDeletingAppointment}
         />
       </Modal.Window>
@@ -117,4 +113,4 @@ function AppointmentDetail() {
   )
 }
 
-export default AppointmentDetail
+export default Detail

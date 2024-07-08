@@ -80,10 +80,12 @@ function DateForm({ control, error }: DateFormProps) {
               inputRef={ref}
               value={field.value}
               onChange={(e) => {
+                console.log(moment(e as Date).format("YYYY-MM-DD"))
+
                 onChange(moment(e as Date).toLocaleString())
 
                 setSessionFormData({
-                  date: moment(e as Date).toLocaleString(),
+                  date: moment(e as Date).format("YYYY-MM-DD"),
                 })
               }}
               minDate={new Date()}

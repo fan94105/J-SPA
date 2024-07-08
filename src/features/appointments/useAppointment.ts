@@ -8,7 +8,7 @@ export function useAppointment() {
   const id = appointmentId || ""
 
   const { data: appointment, isPending: isPendingAppointment } = useQuery({
-    queryKey: ["appointment", id],
+    queryKey: ["appointments", id],
     queryFn: () => {
       if (id) return getAppointment(id!)
 
