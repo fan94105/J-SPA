@@ -1,3 +1,4 @@
+import moment from "moment"
 import { TablesInsert, TablesUpdate } from "../supabase"
 import { PAGE_SIZE } from "../utils/constants"
 import supabase from "./supabase"
@@ -67,6 +68,58 @@ export async function getAppointmentsByLineId(lineId: string) {
   if (error) {
     console.error(error)
     throw new Error(`LineID ${lineId} appointments could not be loaded`)
+  }
+
+  return data
+}
+
+export async function getAppointmentsAfterDate(date: string) {
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .gte("date", date)
+    .lte("date", moment().format("YYYY-MM-DD"))
+
+  if (error) {
+    console.error(error)
+    throw new Error("Appointments after date could not be loaded")
+  }
+
+  return data
+}
+
+export async function getConfirmedAppointmentsAfterDate({
+  status,
+  date,
+}: {
+  status: "confirmed" | "completed"
+  date: string
+}) {
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .gte("date", date)
+    .lte("date", moment().format("YYYY-MM-DD"))
+    .eq("status", status)
+
+  if (error) {
+    console.error(error)
+    throw new Error("Confirmed appointments could not be loaded")
+  }
+
+  return data
+}
+
+export async function getTodayConfirmedAppointments() {
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .eq("date", moment().format("YYYY-MM-DD"))
+    .eq("status", "confirmed")
+
+  if (error) {
+    console.error(error)
+    throw new Error("Today confirmed appointments could not be loaded")
   }
 
   return data

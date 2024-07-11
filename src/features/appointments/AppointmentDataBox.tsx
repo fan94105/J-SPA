@@ -111,7 +111,6 @@ function AppointmentDataBox({
   service,
   option,
 }: AppointmentDataBoxProps) {
-  console.log(appointment.date)
   const date = isToday(appointment.date!)
     ? "今天"
     : moment(appointment.date).format("YYYY/MM/DD ddd")

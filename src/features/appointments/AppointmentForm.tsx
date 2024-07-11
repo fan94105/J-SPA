@@ -10,7 +10,11 @@ import UserForm from "./UserForm"
 import ServiceForm from "./ServiceForm"
 import TimeForm from "./TimeForm"
 
-import { clearSessionFormData, getSessionFormData } from "../../utils/helpers"
+import {
+  clearSessionFormData,
+  getSessionFormData,
+  setSessionFormData,
+} from "../../utils/helpers"
 import { useLiff } from "../../context/LiffContext"
 import { useServices } from "../service/useServices"
 import { useOptions } from "../option/useOptions"
@@ -19,6 +23,7 @@ import { useEditAppointment } from "./useEditAppointment"
 import useMultistepForm from "../../hooks/useMultistepForm"
 
 import { Appointment, FormValues } from "../../types/global"
+import { useEffect } from "react"
 
 const StyledAppointmentForm = styled.section`
   width: 80%;
@@ -177,9 +182,13 @@ function AppointmentForm({ appointmentToEdit = {} }: AppointmentFormProps) {
       )
   }
 
-  // useEffect(() => {
-  //   reset(defaultValues)
-  // }, [profile])
+  useEffect(() => {
+    if (!isEditSession) {
+      setSessionFormData({ displayName: profile?.displayName })
+
+      reset(defaultValues)
+    }
+  }, [profile])
 
   return (
     <StyledAppointmentForm>

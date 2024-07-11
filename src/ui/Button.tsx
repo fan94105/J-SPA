@@ -32,6 +32,7 @@ const variations = {
 const Button = styled.button<{
   $variation?: "primary" | "secondary" | "danger"
 }>`
+  text-align: center;
   padding: 0.5rem 1rem;
   border: 1px solid var(--color-grey-300);
   border-radius: 5px;

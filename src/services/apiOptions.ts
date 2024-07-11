@@ -9,7 +9,7 @@ export async function getOptions() {
   return data
 }
 
-export async function getOption(id: string) {
+export async function getOption(id: number) {
   const { data, error } = await supabase
     .from("options")
     .select("*")
