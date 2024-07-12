@@ -10,33 +10,48 @@ import Spinner from "../../ui/Spinner"
 import { useServices } from "../service/useServices"
 import { useOptions } from "../option/useOptions"
 import { useAppointmentsByDate } from "./useAppointmentsByDate"
-
-import { FormValues } from "../../types/global"
+import { useSettings } from "../settings/useSettings"
 import { getSessionFormData } from "../../utils/helpers"
 
-const times = [
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-  "17:30",
-  "18:00",
-  "18:30",
-  "19:00",
-  "19:30",
-  "20:00",
-]
+import { FormValues } from "../../types/global"
+
+// const times = [
+//   "09:00",
+//   "09:30",
+//   "10:00",
+//   "10:30",
+//   "11:00",
+//   "11:30",
+//   "13:00",
+//   "13:30",
+//   "14:00",
+//   "14:30",
+//   "15:00",
+//   "15:30",
+//   "16:00",
+//   "16:30",
+//   "17:00",
+//   "17:30",
+//   "18:00",
+//   "18:30",
+//   "19:00",
+//   "19:30",
+//   "20:00",
+// ]
+
+function generateTimes(start: string, end: string, step: number = 30) {
+  const times = []
+  let currentTime = moment(start, "HH:mm")
+  const endTime = moment(end, "HH:mm")
+
+  while (currentTime.isSameOrBefore(endTime)) {
+    times.push(currentTime.format("HH:mm"))
+
+    currentTime = currentTime.add(step, "minutes")
+  }
+
+  return times
+}
 
 type TimeFormProps = {
   register: UseFormRegister<FormValues>
@@ -44,6 +59,13 @@ type TimeFormProps = {
 }
 
 function TimeForm({ register, error }: TimeFormProps) {
+  const { settings, isPendingSettings } = useSettings()
+
+  const times = generateTimes(
+    settings?.openTime?.slice(0, 5)!,
+    settings?.closeTime?.slice(0, 5)!
+  )
+
   const { appointmentId } = useParams()
 
   const isEditSession = Boolean(appointmentId)
@@ -110,7 +132,12 @@ function TimeForm({ register, error }: TimeFormProps) {
         return !overlaps
       })
 
-  if (isPendingAppointmentsByDate || isPendingServices || isPendingOptions)
+  if (
+    isPendingAppointmentsByDate ||
+    isPendingServices ||
+    isPendingOptions ||
+    isPendingSettings
+  )
     return <Spinner />
 
   return (

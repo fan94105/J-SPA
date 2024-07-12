@@ -126,7 +126,6 @@ function AppointmentItem({ appointment }: AppointmentItemProps) {
         : null,
     }
 
-    console.log("設定編輯資料")
     setSessionFormData(editFormData)
 
     navigate(`/appointments/edit/${appointmentId}`)

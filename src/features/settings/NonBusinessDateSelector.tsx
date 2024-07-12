@@ -12,8 +12,13 @@ import Spinner from "../../ui/Spinner"
 
 import { useUpdateSettings } from "./useUpdateSettings"
 
+const StyledNonBusinessDateSelector = styled.div`
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-grey-300);
+`
+
 const StyledHeading = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
 `
 
 function NonBusinessDateSelector() {
@@ -52,7 +57,12 @@ function NonBusinessDateSelector() {
   useEffect(() => {
     if (!selectedDates) return
 
-    updateSettings({ nonBusinessDates: selectedDates })
+    // 只有今天之後的日期才可以存入 database
+    updateSettings({
+      nonBusinessDates: selectedDates.filter((date) =>
+        moment(date).isSameOrAfter(moment(), "day")
+      ),
+    })
   }, [selectedDates])
 
   useEffect(() => {
@@ -63,9 +73,9 @@ function NonBusinessDateSelector() {
   if (isPendingSettings) return <Spinner />
 
   return (
-    <>
+    <StyledNonBusinessDateSelector>
       <StyledHeading>
-        <Heading as="h3">選擇不營業的日期</Heading>
+        <Heading as="h2">選擇不營業的日期</Heading>
       </StyledHeading>
 
       <Calendar
@@ -76,7 +86,7 @@ function NonBusinessDateSelector() {
         minDate={new Date()}
         formatDay={(_, date) => moment(date).format("DD")}
       />
-    </>
+    </StyledNonBusinessDateSelector>
   )
 }
 

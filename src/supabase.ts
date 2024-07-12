@@ -143,19 +143,25 @@ export type Database = {
       }
       settings: {
         Row: {
+          closeTime: string | null
           created_at: string
           id: number
           nonBusinessDates: string[] | null
+          openTime: string | null
         }
         Insert: {
+          closeTime?: string | null
           created_at?: string
           id?: number
           nonBusinessDates?: string[] | null
+          openTime?: string | null
         }
         Update: {
+          closeTime?: string | null
           created_at?: string
           id?: number
           nonBusinessDates?: string[] | null
+          openTime?: string | null
         }
         Relationships: []
       }
