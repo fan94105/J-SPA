@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled, { css } from "styled-components"
 import {
@@ -14,13 +14,16 @@ import {
   HiOutlineUser,
   HiOutlineXMark,
 } from "react-icons/hi2"
+
 import ButtonIcon from "./ButtonIcon"
+
 import { useOutsideClick } from "../hooks/useOutsideClick"
-import { tablet } from "../styles/device"
 import { useLiff } from "../context/LiffContext"
-import { clearSessionFormData } from "../utils/helpers"
 import { useUser } from "../features/authentication/useUser"
 import { useLogout } from "../features/authentication/useLogout"
+import { clearSessionFormData } from "../utils/helpers"
+
+import { tablet } from "../styles/device"
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -308,6 +311,13 @@ function Navbar() {
                 <Link to="dashboard/options" onClick={handleChangeUrl}>
                   <HiOutlineSparkles />
                   <span>全部加選</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link to="dashboard/settings" onClick={handleChangeUrl}>
+                  <HiOutlineCog6Tooth />
+                  <span>設定</span>
                 </Link>
               </li>
             </>

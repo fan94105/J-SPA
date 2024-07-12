@@ -1,57 +1,16 @@
-import React, { useState } from "react"
-import styled from "styled-components"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
-import FormWrapper from "../../ui/FormWrapper"
 import { Control, Controller } from "react-hook-form"
-import FormErrorMsg from "../../ui/FormErrorMsg"
 import moment from "moment"
-import { FormValues } from "../../types/global"
+
+import FormWrapper from "../../ui/FormWrapper"
+import FormErrorMsg from "../../ui/FormErrorMsg"
+
 import { setSessionFormData } from "../../utils/helpers"
 
-const StyledCalendarContainer = styled.div`
-  .react-calendar {
-    width: 100%;
-    max-width: 60rem;
-    padding: 0.8rem;
-    margin: 0 auto;
-    border: 1px solid var(--color-grey-300);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .react-calendar__navigation button:disabled {
-    background: none;
-    color: var(--color-grey-400);
-  }
-
-  .react-calendar__month-view__weekdays {
-    margin-bottom: 1rem;
-  }
-
-  .react-calendar__month-view__days {
-    display: grid !important;
-    grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
-  }
-
-  .react-calendar__tile {
-    border: 1px solid var(--color-grey-300);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 0.6rem;
-
-    &--now {
-      /* background: var(--color-brand-100); */
-      background: transparent;
-      color: var(--color-brand-600);
-    }
-
-    &--active {
-      background: var(--color-brand-600);
-      color: var(--color-grey-0);
-    }
-  }
-`
+import { FormValues } from "../../types/global"
+import { useSettings } from "../settings/useSettings"
+import Spinner from "../../ui/Spinner"
 
 /*
    Disable dates
@@ -68,47 +27,49 @@ type DateFormProps = {
 }
 
 function DateForm({ control, error }: DateFormProps) {
+  const { settings, isPendingSettings } = useSettings()
+
+  if (isPendingSettings) return <Spinner />
+
   return (
     <FormWrapper title="預約日期">
-      <StyledCalendarContainer>
-        <Controller
-          control={control}
-          name="date"
-          render={({ field: { ref, onChange, ...field } }) => (
-            <Calendar
-              {...field}
-              inputRef={ref}
-              value={field.value}
-              onChange={(e) => {
-                console.log(moment(e as Date).format("YYYY-MM-DD"))
+      <Controller
+        control={control}
+        name="date"
+        render={({ field: { ref, onChange, ...field } }) => (
+          <Calendar
+            {...field}
+            inputRef={ref}
+            value={field.value}
+            onChange={(e) => {
+              console.log(moment(e as Date).format("YYYY-MM-DD"))
 
-                onChange(moment(e as Date).toLocaleString())
+              onChange(moment(e as Date).toLocaleString())
 
-                setSessionFormData({
-                  date: moment(e as Date).format("YYYY-MM-DD"),
-                })
-              }}
-              minDate={new Date()}
-              formatDay={(_, date) =>
-                date.toLocaleString("en-US", { day: "2-digit" })
+              setSessionFormData({
+                date: moment(e as Date).format("YYYY-MM-DD"),
+              })
+            }}
+            minDate={new Date()}
+            formatDay={(_, date) => moment(date).format("DD")}
+            tileDisabled={({ date }) => {
+              const dateString = moment(date).format("YYYY-MM-DD")
+              if (settings?.nonBusinessDates!.includes(dateString)) {
+                return true
               }
-              tileDisabled={({ date }) => {
-                const dateString = date.toISOString().split("T")[0]
-                if (blockout.includes(dateString)) {
-                  return true
-                }
-                if (date.getDay() === 0) {
-                  return true
-                }
-                return false
-              }}
-            />
-          )}
-          rules={{
-            required: "請選擇預約日期",
-          }}
-        />
-      </StyledCalendarContainer>
+
+              // if (date.getDay() === 0) {
+              //   return true
+              // }
+
+              return false
+            }}
+          />
+        )}
+        rules={{
+          required: "請選擇預約日期",
+        }}
+      />
 
       {error && <FormErrorMsg>{error}</FormErrorMsg>}
     </FormWrapper>

@@ -20,6 +20,7 @@ import AppointmentDetail from "./features/appointments/AppointmentDetail"
 import ServiceDetail from "./features/service/ServiceDetail"
 
 import GlobalStyles from "./styles/GlobalStyles"
+import Settings from "./pages/Settings"
 
 function App() {
   const vConsole = new VConsole()
@@ -75,6 +76,8 @@ function App() {
               <Route path="services/:serviceId" element={<ServiceDetail />} />
 
               <Route path="options" element={<DashboardOptions />} />
+
+              <Route path="settings" element={<Settings />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
