@@ -12,6 +12,7 @@ import {
   HiOutlineSparkles,
   HiOutlineSquaresPlus,
   HiOutlineUser,
+  HiOutlineUsers,
   HiOutlineXMark,
 } from "react-icons/hi2"
 
@@ -318,6 +319,13 @@ function Navbar() {
                 <Link to="dashboard/settings" onClick={handleChangeUrl}>
                   <HiOutlineCog6Tooth />
                   <span>設定</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link to="dashboard/users" onClick={handleChangeUrl}>
+                  <HiOutlineUsers />
+                  <span>管理員</span>
                 </Link>
               </li>
             </>

@@ -16,11 +16,12 @@ import DashboardServices from "./pages/DashboardServices"
 import DashboardOptions from "./pages/DashboardOptions"
 import DashboardCheck from "./pages/DashboardCheck"
 import DashboardAppointmentDetail from "./pages/DashboardAppointmentDetail"
+import Settings from "./pages/Settings"
+import Users from "./pages/Users"
 import AppointmentDetail from "./features/appointments/AppointmentDetail"
 import ServiceDetail from "./features/service/ServiceDetail"
 
 import GlobalStyles from "./styles/GlobalStyles"
-import Settings from "./pages/Settings"
 
 function App() {
   const vConsole = new VConsole()
@@ -78,6 +79,8 @@ function App() {
               <Route path="options" element={<DashboardOptions />} />
 
               <Route path="settings" element={<Settings />} />
+
+              <Route path="users" element={<Users />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
