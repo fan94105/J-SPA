@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import toast from "react-hot-toast"
+
 import { updateSettings as updateSettingsApi } from "../../services/apiSettings"
-import { TablesUpdate } from "../../supabase"
 
 export function useUpdateSettings() {
   const queryClient = useQueryClient()
@@ -9,10 +10,14 @@ export function useUpdateSettings() {
     {
       mutationFn: updateSettingsApi,
       onSuccess: () => {
+        toast.success("更新設定成功")
+
         queryClient.invalidateQueries({ queryKey: ["settings"] })
       },
       onError: (err) => {
         console.error(err.message)
+
+        toast.error("更新設定失敗")
       },
     }
   )

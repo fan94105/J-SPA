@@ -87,6 +87,10 @@ function SignupForm() {
           placeholder=""
           {...register("password", {
             required: "請輸入密碼",
+            minLength: {
+              value: 6,
+              message: "密碼至少 6 個字元",
+            },
           })}
           disabled={isSigningup}
         />
@@ -99,6 +103,10 @@ function SignupForm() {
           placeholder=""
           {...register("passwordConfirm", {
             required: "請輸入確認密碼",
+            minLength: {
+              value: 6,
+              message: "密碼至少 6 個字元",
+            },
             validate: (value) =>
               value === getValues("password") || "密碼不相符",
           })}
