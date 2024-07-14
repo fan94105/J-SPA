@@ -27,6 +27,7 @@ import ServiceDetail from "./features/service/ServiceDetail"
 import { LiffContextProvider } from "./context/LiffContext"
 
 import GlobalStyles from "./styles/GlobalStyles"
+import Account from "./pages/Account"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -107,6 +108,8 @@ function App() {
                   <Route path="settings" element={<Settings />} />
 
                   <Route path="users" element={<Users />} />
+
+                  <Route path="account" element={<Account />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />

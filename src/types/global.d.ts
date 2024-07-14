@@ -25,6 +25,20 @@ type SignupFormValues = {
   passwordConfirm?: string
 }
 
+type UpdateUserDataFormValues = {
+  fullName: string
+}
+
+type UpdatePasswordFormValues = {
+  password: string
+  passwordConfirm?: string
+}
+
+type UpdateUserData = {
+  fullName?: string
+  password?: string
+}
+
 type AuthFormValues = {
   email: string
   password: string
@@ -40,6 +54,9 @@ export {
   Profile,
   FormValues,
   SignupFormValues,
+  UpdateUserDataFormValues,
+  UpdatePasswordFormValues,
+  UpdateUserData,
   AuthFormValues,
   Appointment,
   Service,

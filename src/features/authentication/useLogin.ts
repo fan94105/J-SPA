@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 
-import { login as loginApi } from "../../services/apiAuth"
+import { getCurrentUser, login as loginApi } from "../../services/apiAuth"
 
 import { AuthFormValues } from "../../types/global"
 import supabase from "../../services/supabase"
@@ -14,14 +14,13 @@ export function useLogin() {
   const { mutate: login, isPending: isLogin } = useMutation({
     mutationFn: ({ email, password }: AuthFormValues) =>
       loginApi({ email, password }),
-    onSuccess: async (user) => {
-      const {
-        data: { user: userData },
-      } = await supabase.auth.getUser()
+    onSuccess: async () => {
+      const user = await getCurrentUser()
 
-      toast.success(`歡迎回來 ${userData?.user_metadata.fullName}`)
+      toast.success(`歡迎回來 ${user?.user_metadata.fullName}`)
 
-      await queryClient.setQueryData(["user"], user.user)
+      queryClient.setQueryData(["user"], user)
+
       navigate("/dashboard")
     },
     onError: (err) => {

@@ -325,7 +325,14 @@ function Navbar() {
               <li>
                 <Link to="dashboard/users" onClick={handleChangeUrl}>
                   <HiOutlineUsers />
-                  <span>管理員</span>
+                  <span>新增管理員</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link to="dashboard/account" onClick={handleChangeUrl}>
+                  <HiOutlineUser />
+                  <span>帳號設定</span>
                 </Link>
               </li>
             </>

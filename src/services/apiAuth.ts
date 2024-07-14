@@ -1,6 +1,12 @@
 import supabase from "./supabase"
 
-import { AuthFormValues, SignupFormValues } from "../types/global"
+import {
+  AuthFormValues,
+  SignupFormValues,
+  UpdateUserData,
+} from "../types/global"
+import { TablesUpdate } from "../supabase"
+import { UserAttributes } from "@supabase/supabase-js"
 
 export async function signup({ fullName, email, password }: SignupFormValues) {
   const { data, error } = await supabase.auth.signUp({
@@ -45,4 +51,19 @@ export async function getCurrentUser() {
   if (error) throw new Error(error.message)
 
   return data?.user
+}
+
+export async function updateCurrentUser({
+  fullName,
+  password,
+}: UpdateUserData) {
+  let updateData = {} as UserAttributes
+  if (fullName) updateData = { data: { fullName } }
+  if (password) updateData = { password }
+
+  const { data, error } = await supabase.auth.updateUser(updateData)
+
+  if (error) throw new Error(error.message)
+
+  return data
 }

@@ -31,7 +31,7 @@ function LoginForm() {
 
   const { register, formState, handleSubmit } = useForm<AuthFormValues>({
     defaultValues: {
-      email: "test@example.com",
+      email: "aben@test.com",
       password: "000000",
     },
   })
