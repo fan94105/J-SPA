@@ -55,7 +55,7 @@ function NonBusinessDateSelector() {
   }
 
   useEffect(() => {
-    if (!selectedDates) return
+    if (!selectedDates || selectedDates === settings?.nonBusinessDates) return
 
     // 只有今天之後的日期才可以存入 database
     updateSettings({
