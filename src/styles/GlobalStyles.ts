@@ -184,11 +184,16 @@ abbr[title] {
     text-decoration: none;
 }
 
-img {
+  img {
   max-width: 100%;
 
   /* For dark mode */
   filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
+  }
+
+  /* navbar */
+  .show-icon{
+    transform: rotate(90deg);
   }
 
   /* slick */
