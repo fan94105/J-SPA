@@ -1,11 +1,11 @@
-import React from "react"
+import { Link } from "react-router-dom"
 import styled, { css } from "styled-components"
+import { HiOutlineClock, HiOutlineCurrencyDollar } from "react-icons/hi2"
+import { Tables } from "../../supabase"
 
 import Heading from "../../ui/Heading"
 import Button from "../../ui/Button"
-import { Link } from "react-router-dom"
-import { Tables } from "../../supabase"
-import { HiOutlineClock, HiOutlineCurrencyDollar } from "react-icons/hi2"
+
 import { desktop, laptop } from "../../styles/device"
 
 const StyledServiceBox = styled.div`
@@ -23,9 +23,15 @@ const StyledServiceBox = styled.div`
 `
 
 const StyledImage = styled.div`
+  max-height: 30rem;
   overflow: hidden;
 
+  ${desktop(css`
+    max-height: unset;
+  `)}
+
   img {
+    height: 100%;
     display: block;
     object-fit: cover;
     object-position: center;

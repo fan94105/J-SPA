@@ -1,4 +1,3 @@
-import React from "react"
 import styled, { css } from "styled-components"
 
 import "slick-carousel/slick/slick.css"
@@ -7,8 +6,9 @@ import Slider from "react-slick"
 
 import ServiceBox from "./ServiceBox"
 import Heading from "../../ui/Heading"
-import { useServices } from "./useServices"
 import Spinner from "../../ui/Spinner"
+
+import { useServices } from "./useServices"
 import { desktop } from "../../styles/device"
 
 const StyledServicesOverview = styled.section`
@@ -27,7 +27,7 @@ const StyledHeader = styled.header`
 `
 
 const settings = {
-  dots: true,
+  dots: false,
   infinite: true,
   autoplay: true,
   autoplaySpeed: 4000,

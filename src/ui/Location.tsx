@@ -1,9 +1,12 @@
-import React from "react"
 import styled, { css } from "styled-components"
-import Heading from "./Heading"
-import { desktop } from "../styles/device"
-import { FaInstagram, FaLine, FaSquareInstagram } from "react-icons/fa6"
+import { FaInstagram, FaLine } from "react-icons/fa6"
 import { FaFacebookSquare } from "react-icons/fa"
+
+import Heading from "./Heading"
+
+import { desktop } from "../styles/device"
+import { useSettings } from "../features/settings/useSettings"
+import Spinner from "./Spinner"
 
 const StyledBackground = styled.div`
   background-color: var(--color-grey-0);
@@ -68,12 +71,18 @@ const StyledLinkGroup = styled.div`
 `
 
 const StyledLine = styled.a`
+  background-color: #fff;
+  border-radius: var(--border-radius-sm);
+
   svg {
     color: #06c755;
   }
 `
 
 const StyledFacebook = styled.a`
+  background-color: #fff;
+  border-radius: var(--border-radius-sm);
+
   svg {
     color: #0165e1;
   }
@@ -105,6 +114,8 @@ const StyledInstagram = styled.a`
 const StyledMap = styled.div``
 
 function Location() {
+  const { settings, isPendingSettings } = useSettings()
+
   return (
     <StyledBackground>
       <StyledLocation>
@@ -115,11 +126,18 @@ function Location() {
           <StyledInfo>
             <Heading as="h3">J~SPA 香氛舒壓工作坊</Heading>
 
-            <StyledInfoItem>
-              <p>營業時間 | 周一至周日 10:00 - 18:00</p>
-              <p>地址 | 台中市后里區南村路333巷1-3號</p>
-              <p>電話 | 0999-999-999</p>
-            </StyledInfoItem>
+            {isPendingSettings ? (
+              <Spinner />
+            ) : (
+              <StyledInfoItem>
+                <p>
+                  營業時間 | 周一至周日 {settings?.openTime?.slice(0, 5)} -{" "}
+                  {settings?.closeTime?.slice(0, 5)}
+                </p>
+                <p>地址 | 台中市后里區南村路333巷1-3號</p>
+                <p>電話 | 0999-999-999</p>
+              </StyledInfoItem>
+            )}
 
             <StyledLinkGroup>
               <StyledLine href="#">
