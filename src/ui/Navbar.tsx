@@ -22,6 +22,7 @@ import { useUser } from "../features/authentication/useUser"
 import { useLogout } from "../features/authentication/useLogout"
 
 import { desktop, laptop } from "../styles/device"
+import ThemeModeToggle from "./ThemeModeToggle"
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -71,7 +72,7 @@ const StyledToggle = styled.div<{ $isNavOpen: boolean }>`
   & svg {
     width: 2.6rem;
     height: 2.6rem;
-    color: var(--color-grey-500);
+    color: var(--color-brand-600);
     cursor: pointer;
 
     transition: opacity 0.1s;
@@ -99,10 +100,16 @@ const StyledClose = styled.div<{ $isNavOpen: boolean }>`
   }
 `
 
+const StyledTools = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+`
+
 /*========== Profile Dropdown ==========*/
 const StyledProfileDropdownContainer = styled.div`
   height: 100%;
-  padding-block: 1rem;
+  /* padding-block: 1rem; */
 
   position: relative;
 
@@ -128,6 +135,7 @@ const StyledProfileDropdownContainer = styled.div`
 const StyledProfileLoginBtn = styled.button`
   height: 100%;
   padding: 0 1.6rem;
+  color: var(--color-grey-600);
   background-color: var(--color-grey-100);
   border: 1px solid var(--color-grey-200);
   border-radius: var(--border-radius-sm);
@@ -146,7 +154,7 @@ const StyledProfileDropdown = styled.div`
   column-gap: 0.5rem;
 
   ${laptop(css`
-    padding: 0 1.6rem;
+    padding: 0.5rem 1.6rem;
     background-color: var(--color-grey-100);
     border: 1px solid var(--color-grey-200);
     border-radius: var(--border-radius-sm);
@@ -163,7 +171,7 @@ const StyledProfileDropdown = styled.div`
 const StyledProfileImg = styled.div`
   width: 2.6rem;
   height: 2.6rem;
-  box-shadow: var(--shadow-lg);
+  outline: 2px solid var(--color-grey-100);
   border-radius: 50%;
   overflow: hidden;
 
@@ -173,6 +181,7 @@ const StyledProfileImg = styled.div`
     height: 100%;
     object-fit: cover;
     object-position: center;
+    aspect-ratio: 1 / 1;
   }
 `
 
@@ -230,7 +239,7 @@ const StyledProfileDropdownMenu = styled.ul`
   opacity: 0;
 
   position: absolute;
-  top: 4.2rem;
+  top: 3.4rem;
   right: 0;
   transform: scale(0.1);
   transform-origin: 12.2rem -3rem;
@@ -244,7 +253,7 @@ const StyledProfileDropdownMenu = styled.ul`
   }
 
   ${laptop(css`
-    top: 6.2rem;
+    top: 5rem;
   `)}
 `
 
@@ -425,6 +434,7 @@ const StyledDivLink = styled.div`
   & svg {
     width: 1.5rem;
     height: 1.5rem;
+    color: var(--color-brand-600);
     font-weight: initial;
 
     transition: transform 0.4s;
@@ -551,61 +561,58 @@ function Navbar() {
 
           <StyledLogo to="/">Logo</StyledLogo>
 
-          <StyledProfileDropdownContainer>
-            {!isLoggedIn && (
-              <StyledProfileLoginBtn onClick={handleLogin}>
-                登入
-              </StyledProfileLoginBtn>
-            )}
-
-            {isLoggedIn && profile && (
-              <StyledProfileDropdown tabIndex={0}>
-                <StyledProfileImg>
-                  <img
-                    src={profile.pictureUrl}
-                    alt={`${profile.displayName} 的照片`}
-                  />
-                </StyledProfileImg>
-
-                <StyledName>{profile.displayName}</StyledName>
-
-                {/* <StyledIcons>
-                <HiChevronDown className="profile-dropdown-arrow" />
-
-                <HiOutlineXMark className="profile-dropdown-close" />
-              </StyledIcons> */}
-              </StyledProfileDropdown>
-            )}
-
-            <StyledProfileDropdownMenu onClick={handleCloseDropdown}>
-              {isLoggedIn && !isAuthenticated && (
-                <li>
-                  <StyledProfileDropdownLink to="login">
-                    <HiOutlineUser />
-                    管理員登入
-                  </StyledProfileDropdownLink>
-                </li>
+          <StyledTools>
+            <StyledProfileDropdownContainer>
+              {!isLoggedIn && (
+                <StyledProfileLoginBtn onClick={handleLogin}>
+                  登入
+                </StyledProfileLoginBtn>
               )}
-
-              {isAuthenticated && (
-                <li>
-                  <StyledProfileDropdownLink to="dashboard/account">
-                    <HiOutlineLockClosed />
-                    帳號設定
-                  </StyledProfileDropdownLink>
-                </li>
+              {isLoggedIn && profile && (
+                <StyledProfileDropdown tabIndex={0}>
+                  <StyledProfileImg>
+                    <img
+                      src={profile.pictureUrl}
+                      alt={`${profile.displayName}的照片`}
+                    />
+                  </StyledProfileImg>
+                  <StyledName>{profile.displayName}</StyledName>
+                  {/* <StyledIcons>
+                  <HiChevronDown className="profile-dropdown-arrow" />
+                  <HiOutlineXMark className="profile-dropdown-close" />
+                </StyledIcons> */}
+                </StyledProfileDropdown>
               )}
+              <StyledProfileDropdownMenu onClick={handleCloseDropdown}>
+                {isLoggedIn && !isAuthenticated && (
+                  <li>
+                    <StyledProfileDropdownLink to="login">
+                      <HiOutlineUser />
+                      管理員登入
+                    </StyledProfileDropdownLink>
+                  </li>
+                )}
+                {isAuthenticated && (
+                  <li>
+                    <StyledProfileDropdownLink to="dashboard/account">
+                      <HiOutlineLockClosed />
+                      帳號設定
+                    </StyledProfileDropdownLink>
+                  </li>
+                )}
+                {isLoggedIn && (
+                  <li>
+                    <StyledProfileDropdownBtn onClick={handleLogout}>
+                      <HiOutlineArrowRightOnRectangle />
+                      登出
+                    </StyledProfileDropdownBtn>
+                  </li>
+                )}
+              </StyledProfileDropdownMenu>
+            </StyledProfileDropdownContainer>
 
-              {isLoggedIn && (
-                <li>
-                  <StyledProfileDropdownBtn onClick={handleLogout}>
-                    <HiOutlineArrowRightOnRectangle />
-                    登出
-                  </StyledProfileDropdownBtn>
-                </li>
-              )}
-            </StyledProfileDropdownMenu>
-          </StyledProfileDropdownContainer>
+            <ThemeModeToggle />
+          </StyledTools>
         </StyledData>
 
         <StyledMenu $isNavOpen={isNavOpen}>

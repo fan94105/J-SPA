@@ -28,6 +28,7 @@ import ServiceDetail from "./features/service/ServiceDetail"
 import { LiffContextProvider } from "./context/LiffContext"
 
 import GlobalStyles from "./styles/GlobalStyles"
+import { ThemeModeProvider } from "./context/ThemeModeContext"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,99 +46,101 @@ function App() {
   return (
     <>
       <LiffContextProvider>
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
+        <ThemeModeProvider>
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
 
-          <GlobalStyles />
+            <GlobalStyles />
 
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<AppLayout />}>
-                <Route index element={<Home />} />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<AppLayout />}>
+                  <Route index element={<Home />} />
 
-                <Route path="appointment" element={<Appointment />} />
+                  <Route path="appointment" element={<Appointment />} />
 
-                <Route path="appointments" element={<Appointments />} />
-
-                <Route
-                  path="appointments/:appointmentId"
-                  element={<AppointmentDetail />}
-                />
-
-                <Route
-                  path="appointments/edit/:appointmentId"
-                  element={<EditAppointment />}
-                />
-
-                <Route path="login" element={<Login />} />
-
-                <Route
-                  path="dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardLayout />
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route index element={<Dashboard />} />
-
-                  <Route
-                    path="check/:appointmentId"
-                    element={<DashboardCheck />}
-                  />
-
-                  <Route
-                    path="appointments"
-                    element={<DashboardAppointments />}
-                  />
+                  <Route path="appointments" element={<Appointments />} />
 
                   <Route
                     path="appointments/:appointmentId"
-                    element={<DashboardAppointmentDetail />}
+                    element={<AppointmentDetail />}
                   />
-
-                  <Route path="services" element={<DashboardServices />} />
 
                   <Route
-                    path="services/:serviceId"
-                    element={<ServiceDetail />}
+                    path="appointments/edit/:appointmentId"
+                    element={<EditAppointment />}
                   />
 
-                  <Route path="options" element={<DashboardOptions />} />
+                  <Route path="login" element={<Login />} />
 
-                  <Route path="settings" element={<Settings />} />
+                  <Route
+                    path="dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <DashboardLayout />
+                      </ProtectedRoute>
+                    }
+                  >
+                    <Route index element={<Dashboard />} />
 
-                  <Route path="users" element={<Users />} />
+                    <Route
+                      path="check/:appointmentId"
+                      element={<DashboardCheck />}
+                    />
 
-                  <Route path="account" element={<Account />} />
+                    <Route
+                      path="appointments"
+                      element={<DashboardAppointments />}
+                    />
+
+                    <Route
+                      path="appointments/:appointmentId"
+                      element={<DashboardAppointmentDetail />}
+                    />
+
+                    <Route path="services" element={<DashboardServices />} />
+
+                    <Route
+                      path="services/:serviceId"
+                      element={<ServiceDetail />}
+                    />
+
+                    <Route path="options" element={<DashboardOptions />} />
+
+                    <Route path="settings" element={<Settings />} />
+
+                    <Route path="users" element={<Users />} />
+
+                    <Route path="account" element={<Account />} />
+                  </Route>
+
+                  <Route path="*" element={<NotFound />} />
                 </Route>
+              </Routes>
+            </BrowserRouter>
 
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-
-          <Toaster
-            position="top-center"
-            gutter={12}
-            containerStyle={{ margin: "8px" }}
-            toastOptions={{
-              success: {
-                duration: 3000,
-              },
-              error: {
-                duration: 5000,
-              },
-              style: {
-                fontSize: "16px",
-                maxWidth: "500px",
-                padding: "16px 24px",
-                backgroundColor: "var(--color-grey-0)",
-                color: "var(--color-grey-700)",
-              },
-            }}
-          />
-        </QueryClientProvider>
+            <Toaster
+              position="top-center"
+              gutter={12}
+              containerStyle={{ margin: "8px" }}
+              toastOptions={{
+                success: {
+                  duration: 3000,
+                },
+                error: {
+                  duration: 5000,
+                },
+                style: {
+                  fontSize: "16px",
+                  maxWidth: "500px",
+                  padding: "16px 24px",
+                  backgroundColor: "var(--color-grey-0)",
+                  color: "var(--color-grey-700)",
+                },
+              }}
+            />
+          </QueryClientProvider>
+        </ThemeModeProvider>
       </LiffContextProvider>
     </>
   )
