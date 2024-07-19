@@ -2,22 +2,22 @@ import React from "react"
 import { UseFormRegister } from "react-hook-form"
 import styled, { css } from "styled-components"
 import { FormValues } from "../types/global"
-import { laptop } from "../styles/device"
+import { laptop, tablet } from "../styles/device"
 import { setSessionFormData } from "../utils/helpers"
 
 const StyledSelectableTime = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(50px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(65px, 100%), 1fr));
   gap: 2rem;
 
-  border: 1px solid var(--color-grey-300);
+  /* border: 1px solid var(--color-grey-300);
   border-radius: var(--border-radius-sm);
-  box-shadow: var(--shadow-sm);
-  padding: 2rem;
+  box-shadow: var(--shadow-sm); */
+  /* padding: 2rem; */
 
-  ${laptop(css`
-    width: 50%;
-    margin: 0 auto;
+  ${tablet(css`
+    grid-template-columns: repeat(auto-fit, minmax(min(100px, 100%), 1fr));
+    gap: 1.2rem;
   `)}
 `
 
@@ -38,6 +38,10 @@ const StyledLabel = styled.label`
   }
 
   transition: all 0.3s;
+
+  ${tablet(css`
+    padding: 1.5rem 2rem;
+  `)}
 `
 
 const StyledInput = styled.input`

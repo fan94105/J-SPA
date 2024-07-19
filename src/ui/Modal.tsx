@@ -1,8 +1,9 @@
 import React, { cloneElement, createContext, useContext, useState } from "react"
 import { createPortal } from "react-dom"
 import { HiXMark } from "react-icons/hi2"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { useOutsideClick } from "../hooks/useOutsideClick"
+import { desktop, tablet } from "../styles/device"
 
 type ModalContextType = {
   openName: string
@@ -71,6 +72,14 @@ const StyledModal = styled.div`
   padding: 3.2rem 4rem;
   transition: all 0.5s;
   overflow-y: auto;
+
+  ${tablet(css`
+    width: 60%;
+  `)}
+
+  ${desktop(css`
+    width: 50%;
+  `)}
 `
 
 const Button = styled.button`

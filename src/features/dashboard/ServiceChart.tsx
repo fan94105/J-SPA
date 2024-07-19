@@ -38,6 +38,15 @@ const ChartBox = styled.div`
   }
 `
 
+const Empty = styled.div`
+  height: 100%;
+  color: var(--color-grey-500);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const lightColor = [
   "#ef4444",
   "#f97316",
@@ -118,32 +127,40 @@ function ServiceChart({ appointments }: ServiceChartProps) {
     <ChartBox>
       <Heading as="h2">服務項目</Heading>
 
-      <ResponsiveContainer width="100%" height={250}>
-        <PieChart>
-          <Pie
-            dataKey="value"
-            data={data}
-            nameKey="name"
-            innerRadius={isMobile ? 40 : 60}
-            outerRadius={isMobile ? 60 : 85}
-            cx="50%"
-            cy="50%"
-            paddingAngle={3}
-          >
-            {data.map((entry: any) => (
-              <Cell fill={entry.color} stroke={entry.color} key={entry.name} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend
-            verticalAlign={isMobile ? "bottom" : "middle"}
-            align={isMobile ? "center" : "right"}
-            layout="vertical"
-            iconSize={15}
-            iconType="circle"
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      {appointments?.length ? (
+        <ResponsiveContainer width="100%" height={250}>
+          <PieChart>
+            <Pie
+              dataKey="value"
+              data={data}
+              nameKey="name"
+              innerRadius={isMobile ? 40 : 60}
+              outerRadius={isMobile ? 60 : 85}
+              cx="50%"
+              cy="50%"
+              paddingAngle={3}
+            >
+              {data.map((entry: any) => (
+                <Cell
+                  fill={entry.color}
+                  stroke={entry.color}
+                  key={entry.name}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend
+              verticalAlign={isMobile ? "bottom" : "middle"}
+              align={isMobile ? "center" : "right"}
+              layout="vertical"
+              iconSize={15}
+              iconType="circle"
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      ) : (
+        <Empty>沒有任何紀錄...</Empty>
+      )}
     </ChartBox>
   )
 }

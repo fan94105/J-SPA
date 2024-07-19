@@ -12,9 +12,10 @@ import { useLiff } from "../../context/LiffContext"
 import { useUsersAppointments } from "./useUsersAppointments"
 
 const StyledUserAppointment = styled.section`
-  min-height: 100dvh;
-  padding: 8rem 2rem 2rem;
-  background-color: var(--color-grey-0);
+  width: 80%;
+  margin: 0 auto;
+  height: 100%;
+  padding: 8rem 0 2rem;
 `
 
 const StyledHeader = styled.header`

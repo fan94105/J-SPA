@@ -1,10 +1,12 @@
 import styled from "styled-components"
+
 import Filter from "../../ui/Filter"
 import SortBy from "../../ui/SortBy"
 
 const StyledRow = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   gap: 0.8rem;
 `

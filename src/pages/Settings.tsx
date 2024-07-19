@@ -8,13 +8,17 @@ const StyledSettings = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
+  & h1 {
+    text-align: center;
+  }
 `
 
 function Settings() {
   return (
     <StyledSettings>
       <div>
-        <Heading as="h1">設定</Heading>
+        <Heading as="h1">營業設定</Heading>
       </div>
 
       <NonBusinessDateSelector />

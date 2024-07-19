@@ -15,6 +15,8 @@ import { desktop } from "../../styles/device"
 import { setSessionFormData } from "../../utils/helpers"
 
 const StyledSelectContainer = styled.div`
+  margin-top: 2rem;
+
   ${desktop(css`
     max-width: 50%;
   `)}

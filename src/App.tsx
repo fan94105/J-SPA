@@ -21,13 +21,13 @@ import DashboardCheck from "./pages/DashboardCheck"
 import DashboardAppointmentDetail from "./pages/DashboardAppointmentDetail"
 import Settings from "./pages/Settings"
 import Users from "./pages/Users"
+import Account from "./pages/Account"
 import AppointmentDetail from "./features/appointments/AppointmentDetail"
 import ServiceDetail from "./features/service/ServiceDetail"
 
 import { LiffContextProvider } from "./context/LiffContext"
 
 import GlobalStyles from "./styles/GlobalStyles"
-import Account from "./pages/Account"
 
 const queryClient = new QueryClient({
   defaultOptions: {

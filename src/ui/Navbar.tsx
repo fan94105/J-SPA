@@ -136,6 +136,7 @@ const StyledProfileLoginBtn = styled.button`
 `
 
 const StyledProfileDropdown = styled.div`
+  width: max-content;
   height: 100%;
 
   cursor: pointer;
@@ -144,21 +145,12 @@ const StyledProfileDropdown = styled.div`
   align-items: center;
   column-gap: 0.5rem;
 
-  & span {
-    display: none;
-    font-weight: 600;
-  }
-
   ${laptop(css`
     padding: 0 1.6rem;
     background-color: var(--color-grey-100);
     border: 1px solid var(--color-grey-200);
     border-radius: var(--border-radius-sm);
     box-shadow: var(--shadow-sm);
-
-    & span {
-      display: inline;
-    }
   `)}
 
   &:focus + ul {
@@ -182,6 +174,23 @@ const StyledProfileImg = styled.div`
     object-fit: cover;
     object-position: center;
   }
+`
+
+const StyledName = styled.div`
+  max-width: 8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+  font-weight: 600;
+
+  ${laptop(css`
+    display: block;
+  `)}
+
+  ${desktop(css`
+    max-width: 12rem;
+  `)}
 `
 
 // const StyledIcons = styled.div`
@@ -254,8 +263,18 @@ const StyledProfileDropdownLink = styled(Link)`
     font-weight: initial;
   }
 
+  &:focus {
+    border: none;
+    outline: 2px solid var(--color-brand-600);
+  }
+
   &:hover {
     background-color: var(--color-grey-50);
+  }
+
+  &:hover svg,
+  &:focus svg {
+    color: var(--color-brand-600);
   }
 `
 
@@ -277,6 +296,11 @@ const StyledProfileDropdownBtn = styled.button`
 
   &:hover {
     background-color: var(--color-grey-50);
+  }
+
+  &:hover svg,
+  &:focus svg {
+    color: var(--color-brand-600);
   }
 `
 
@@ -310,7 +334,7 @@ const StyledMenu = styled.div<{ $isNavOpen: boolean }>`
     width: auto;
     height: 100%;
     top: 0 !important;
-    right: 35%;
+    right: 25%;
     left: unset;
     pointer-events: initial !important;
     opacity: 1 !important;
@@ -318,7 +342,7 @@ const StyledMenu = styled.div<{ $isNavOpen: boolean }>`
   `)}
 
   ${desktop(css`
-    right: 20%;
+    right: 22%;
   `)}
 `
 
@@ -379,7 +403,7 @@ const StyledDropdownItem = styled.li`
       transition: max-height 0.4s ease-in;
     }
 
-    &:hover label svg,
+    &:hover div svg,
     &:focus-within label svg {
       transform: rotate(-180deg);
     }
@@ -441,6 +465,16 @@ const StyledDropdownMenu = styled.ul`
 
 const StyledDropdownLink = styled(StyledProfileDropdownLink)`
   padding: 1.25rem 1.25rem 1.25rem 4.5rem;
+
+  /* &:focus {
+    border: none;
+    outline: 2px solid var(--color-brand-600);
+  } */
+
+  &:hover svg,
+  &:focus svg {
+    color: var(--color-brand-600);
+  }
 
   ${laptop(css`
     padding-inline: 1rem 3.5rem;
@@ -533,7 +567,7 @@ function Navbar() {
                   />
                 </StyledProfileImg>
 
-                <span>{profile.displayName}</span>
+                <StyledName>{profile.displayName}</StyledName>
 
                 {/* <StyledIcons>
                 <HiChevronDown className="profile-dropdown-arrow" />

@@ -14,19 +14,17 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-
-  & button {
-    ${desktop(css`
-      width: 50%;
-      margin: 0 auto;
-    `)}
-  }
 `
 
 const StyledBtnRow = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 1.2rem;
+
+  ${desktop(css`
+    width: 50%;
+    margin: 0 auto;
+  `)}
 `
 
 function SignupForm() {

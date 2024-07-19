@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { SubmitHandler, useForm } from "react-hook-form"
 
 import FormRow from "../../ui/FormRow"
@@ -8,6 +8,7 @@ import { useCreateService } from "./useCreateService"
 import { useEditService } from "./useEditService"
 
 import { TablesInsert, TablesUpdate } from "../../supabase"
+import { desktop } from "../../styles/device"
 
 const StyledCreateEditServiceForm = styled.form`
   display: flex;
@@ -39,8 +40,13 @@ const StyledFileInput = styled.input.attrs({ type: "file" })`
 
 const StyledBtnRow = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
+  justify-content: flex-end;
+  gap: 1.2rem;
+
+  ${desktop(css`
+    width: 50%;
+    margin: 0 auto;
+  `)}
 `
 
 type CreateEditServiceFormProps = {

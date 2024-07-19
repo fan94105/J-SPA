@@ -1,8 +1,16 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import Heading from "../ui/Heading"
 import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm"
 import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm"
+
+import { desktop } from "../styles/device"
+
+const StyledAccount = styled.div`
+  & h1 {
+    text-align: center;
+  }
+`
 
 const StyledRow = styled.div`
   & h3 {
@@ -11,11 +19,17 @@ const StyledRow = styled.div`
 
   padding: 1.6rem 0;
   border-bottom: 1px solid var(--color-grey-300);
+
+  ${desktop(css`
+    & h3 {
+      text-align: center;
+    }
+  `)}
 `
 
 function Account() {
   return (
-    <>
+    <StyledAccount>
       <Heading as="h1">帳號設定</Heading>
 
       <StyledRow>
@@ -29,7 +43,7 @@ function Account() {
 
         <UpdatePasswordForm />
       </StyledRow>
-    </>
+    </StyledAccount>
   )
 }
 

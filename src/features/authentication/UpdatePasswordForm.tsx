@@ -1,30 +1,30 @@
 import styled, { css } from "styled-components"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 import FormRow from "../../ui/FormRow"
 import Button from "../../ui/Button"
 
-import { desktop } from "../../styles/device"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { UpdatePasswordFormValues } from "../../types/global"
 import { useUpdateUser } from "./useUpdateUser"
+
+import { desktop } from "../../styles/device"
+
+import { UpdatePasswordFormValues } from "../../types/global"
 
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-
-  & button {
-    ${desktop(css`
-      width: 50%;
-      margin: 0 auto;
-    `)}
-  }
 `
 
 const StyledBtnRow = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 1.2rem;
+
+  ${desktop(css`
+    width: 50%;
+    margin: 0 auto;
+  `)}
 `
 
 function UpdatePasswordForm() {

@@ -1,10 +1,11 @@
-import React from "react"
-import { Control, Controller, UseFormRegister } from "react-hook-form"
+import { UseFormRegister } from "react-hook-form"
 import styled from "styled-components"
-import { useServices } from "../features/service/useServices"
+
 import Spinner from "./Spinner"
-import { FormValues } from "../types/global"
+import { useServices } from "../features/service/useServices"
 import { setSessionFormData } from "../utils/helpers"
+
+import { FormValues } from "../types/global"
 
 const StyledSelectableCard = styled.div``
 
@@ -15,10 +16,9 @@ const StyledCardList = styled.div`
 `
 
 const StyledLabel = styled.label`
-  min-height: 15rem;
+  min-height: 20rem;
 
   display: grid;
-  /* grid-template-columns: 10rem 1fr; */
   grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
   align-items: center;
   gap: 1rem;

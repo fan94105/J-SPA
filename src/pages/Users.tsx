@@ -5,6 +5,7 @@ import SignupForm from "../features/authentication/SignupForm"
 
 const StyledUsers = styled.div`
   & h1 {
+    text-align: center;
     margin-bottom: 1.6rem;
   }
 `

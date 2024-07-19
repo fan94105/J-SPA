@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import styled from "styled-components"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
@@ -23,7 +24,6 @@ import { useEditAppointment } from "./useEditAppointment"
 import useMultistepForm from "../../hooks/useMultistepForm"
 
 import { Appointment, FormValues } from "../../types/global"
-import { useEffect } from "react"
 
 const StyledAppointmentForm = styled.section`
   width: 80%;
